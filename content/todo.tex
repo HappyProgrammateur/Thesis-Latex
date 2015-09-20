@@ -1,0 +1,77 @@
+% wild gesammelte ideen/texte
+
+
+\section{Extracting HOG based on PASCAL bounding boxes}
+% HOG werden durch exemplar svm geniert
+% maske M_p wird von pixel auf zelle M_c umgerechnet
+\[
+M_c = M_p
+\]
+% mit bicubic kernel convolved
+\[
+k_x = \begin{cases}
+	(a+2)|x|^3-(a+3)|x|^2+1 & \text{for } |x| \leq 1 \\
+	a|x|^3-5a|x|^2+8a|x|-4a & \text{for } 1 < |x| < 2 \\
+	0                       & \text{otherwise}
+\end{cases}; \text{with }a=-0.5\text{ in the \MATLAB implementation}
+\]
+% alle 5x5 bloecke die nicht komplett innerhalb der bbox liegen werden discarded
+
+\section{steps nn}
+\begin{enumerate}
+	\item extract hog for all bicycle and car training images with bounding box
+	\item cluster features with 3000 kmeans cluster
+	\item extract hog for all bicycle test images with bounding box
+	\item generate codebook for each window in each image \ref{codebook_calculation_alg}
+	\item calculate euclidean distance between codebooks
+	\item iterate over all test images and print with N nearest images
+\end{enumerate}
+	
+\section{steps nn-iter}
+\begin{enumerate}
+	\item extract hog for all bicycle and car training images with bounding box
+	\item cluster features with 3000 kmeans cluster
+	\item extract hog for all bicycle test images with bounding box
+	\item generate codebook for each window in each image \ref{codebook_calculation_alg}
+	\item calculate euclidean distance between codebooks
+	\item iterate over all test images and print with N nearest images\label{nn_iter_loop_start}
+	\item remove codebook entries if not shared by other N images
+	\item restart with \ref{nn_iter_loop_start} till no changes
+\end{enumerate}
+
+\section{steps svm}
+\begin{enumerate}
+	\item extract hog for all bicycle training images with sliding window
+	\item randomly discard 55\% of windows per image to fit into memory
+	\item cluster features with 3000 kmeans cluster
+	\item extract hog for all bicycle training images with bounding boxes as positives
+	\item extract hog for all bicycle training images except bounding boxes as negatives
+	\item assign features by nearest neighbor to clusters to generate codebook \ref{codebook_calculation_alg}
+	\item train exemplar svm for each positive
+	\item extract hog for all bicycle test images with sliding window
+	\item generate codebook for each window in each image
+	\item assign label for each window with each trained svm
+\end{enumerate}
+
+\begin{eqnarray}
+codebook_k : \text{element at position }k\text{ in codebook} \\
+f_i : \text{feature }i\text{ of window or image} \\
+C_k : \text{cluster }k \\
+d_{ik} : \text{distance of feature }i\text{ to cluster }k \\
+a_{ik} : \begin{cases}
+1 & \text{if }f_i\text{ belongs to }C_k \\
+0 & \text{otherwise}
+\end{cases} \\
+codebook_k = \sum_{i=1}^N \frac{a_{ik}}{d_{ik}}
+\label{codebook_calculation_alg}
+\end{eqnarray}
+
+\section{steps nn-fisher}
+\begin{enumerate}
+	\item extract hog for all bicycle and car training images with bounding box
+	\item cluster features with 128 gmm cluster
+	\item extract hog for all bicycle test images with bounding box
+	\item calculate fishervector for every image
+	\item calculate euclidean distance between codebooks
+	\item iterate over all test images and print with N nearest images
+\end{enumerate}

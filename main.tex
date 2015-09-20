@@ -1,0 +1,132 @@
+\documentclass[
+	12pt,
+	a4paper,
+	bibliography=totoc,
+	cleardoublepage=empty,
+	index=totoc,
+	%ngerman,
+	openright,
+	%final
+	draft
+	]{scrbook}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\newif\ifcomplete
+\completetrue
+%\completefalse
+
+\input{preamble}
+\input{glossary}
+
+\ifcomplete
+\else
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% uncomment for hiding figures, equotations and listings (show only real text)
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+%\usepackage{comment}
+%
+%\excludecomment{figure}
+%\let\endfigure\relax
+%\excludecomment{wrapfigure}
+%\let\endwrapfigure\relax
+%\excludecomment{equation}
+%\let\endequation\relax
+%\excludecomment{lstlisting}
+%\let\endlstlisting\relax
+
+\fi
+
+\begin{document}
+
+\setcounter{secnumdepth}{3}
+
+\ifcomplete
+% Titelblatt
+\include{content/title}
+\cleardoubleemptypage
+
+\frontmatter
+\pagenumbering{Roman}
+
+
+% Abstract
+\include{content/abstract}
+\cleardoubleemptypage
+
+% Inhaltsverzeichnis
+\phantomsection
+\addcontentsline{toc}{chapter}{\contentsname}
+\tableofcontents
+\cleardoubleemptypage
+
+% Abbildungsverzeichnis einbinden und ins Inhaltsverzeichnis
+% WORKAROUND: tocloft und KOMA funktionieren zusammen nicht
+% korrekt
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename} 
+\listoffigures
+\cleardoubleemptypage
+
+% Tabellenverzeichnis einbinden und ins Inhaltsverzeichnis
+% WORKAROUND: tocloft und KOMA funktionieren zusammen nicht
+% korrekt\phantomsection
+\phantomsection
+\addcontentsline{toc}{chapter}{\listtablename}
+\listoftables
+\cleardoubleemptypage
+
+\fi
+
+% Abkürzungsverzeichnis
+\include{content/abbreviations}
+
+\mainmatter
+
+\include{content/todo}
+
+\include{content/introduction}
+
+\include{content/basics}
+
+\include{content/current_approaches}
+
+\include{content/algorithms}
+
+\include{content/work}
+
+\include{content/results}
+
+\include{content/conclusion_outlook}
+
+\ifcomplete
+% Schlagwortverzeichnis (Index)
+\printindex
+
+%\printglossaries
+
+% Literaturverzeichnis
+\singlespacing
+%\bibliographystyle{alphadin}
+%\bibliography{bibtex}
+\printbibliography
+\nocite{*} % include all bibs
+
+% Eidesstattliche Erklärung
+\include{content/affirmation}
+
+\pretocmd{\chapter}{%
+  \clearpage
+  \pagenumbering{arabic}%
+  \renewcommand*{\thepage}{\thechapter-\arabic{page}}%
+}{}{}
+\begin{appendices}
+% Hier können Anhaenge angefuegt werden
+\input{appendix}
+\end{appendices}
+
+\fi
+
+\end{document}
