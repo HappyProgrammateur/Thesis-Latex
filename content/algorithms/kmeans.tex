@@ -1,4 +1,5 @@
 \section{k-Means}
+\label{sec:kmeans}
 
 The k-means algorithm is used to partition a given set of observations into a predefined amount of $k$ clusters. The algorithm as described by \cite{macqueen1967} starts with a random set of $k$ center-points ($\mu$). During each update step, all observations $x$ are assigned to their nearest center-point (see equation \ref{eqn:kmeans_assign_step}). In the standard algorithm, only one assignment to one center is possible. If multiple centers have the same distance to the observation, a random one could be chosen.
 

@@ -44,6 +44,7 @@ Computer Vision group}
 
 % Mathematische Formeln und Symbole
 \usepackage{amsmath}
+\usepackage{amssymb}
 
 % Bearbeiten von floatings
 \usepackage{floatrow}
@@ -57,10 +58,10 @@ Computer Vision group}
 \usepackage{subcaption}
 
 % Zusaetsliche Sonderzeichen
-\usepackage{dingbat}
+%\usepackage{dingbat}
 
 % Abkuerzungsverzeichnis
-\usepackage{acronym}
+\usepackage[printonlyused]{acronym}
 
 % Farben
 \usepackage{color}
@@ -155,17 +156,17 @@ Computer Vision group}
 % ##################################################
 \usepackage{prettyref}
 %%% Für Kapitel %%%
-\newrefformat{cha}{Chapter~\ref{#1} from page\pageref{#1}}
+\newrefformat{cha}{chapter~\ref{#1} from page\pageref{#1}}
 %%% Für Abschnitte %%%
-\newrefformat{sec}{Paragraph~\ref{#1} at page \pageref{#1}}
+\newrefformat{sec}{section~\ref{#1} at page \pageref{#1}}
 %%% Für Abbildungen %%%
-\newrefformat{fig}{Figure~\ref{#1} at page \pageref{#1}}
+\newrefformat{fig}{figure~\ref{#1} at page \pageref{#1}}
 %%% Für Tabellen %%%
-\newrefformat{tab}{Table~\ref{#1} at page \pageref{#1}} 
+\newrefformat{tab}{table~\ref{#1} at page \pageref{#1}} 
 %%% Für Listings %%%
-\newrefformat{lst}{Listing~\ref{#1} at page \pageref{#1}} 
+\newrefformat{lst}{listing~\ref{#1} at page \pageref{#1}} 
 %%% Für Algorithmen %%%
-\newrefformat{alg}{Algorithm~\ref{#1} at page \pageref{#1}} 
+\newrefformat{alg}{algorithm~\ref{#1} at page \pageref{#1}} 
 
 % ##################################################
 % Inhaltsverzeichnis / Allgemeine Verzeichniseinstellungen

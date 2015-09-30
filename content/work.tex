@@ -1,0 +1,61 @@
+\chapter{Work}
+\label{cha:work}
+
+This chapter describes the experiments and approaches tried and implemented during the thesis. It should give a description about the decisions made and the problems occurred based on the decisions and implementation limitations.
+
+\section{Extracting features}
+
+The image feature were represented by \acf{HOG} (as described in \prettyref{sec:hog})
+
+\section{Abstracting the feature computation}
+
+One of the initial steps made was to find a way to represent a collection of extracted features (as taken from a part candidate or a query image). This should enable the precomputation of the image database and also create a similarity linkage right away into the stored database.
+
+To fulfill these requirements, the decision goes to try to cluster the features with a k-means clustering (see \prettyref{sec:kmeans}) or a fisher vector representation (see \prettyref{sec:fisher}) based on a \acf{GMM} (see \prettyref{sec:gmm}).
+\par
+The initial experiments were used to detect if codebooks based on clustered features could be used to express similarities among different candidates. This was done by using the bicycle and car classes of the \ac{VOC2011} Image database \cite{Pascal2011}.
+The clustering was initially done with 512, 1000 and 3000 k-means and 128, 256 and 384 \ac{GMM} clusters over all features extracted from the \ac{VOC2011} bicycle and car trainval image classes.
+At this point all experiments were done by using normal \ac{HOG} and whiten \ac{HOG} (see \prettyref{sec:whitened_hog}) for performance comparison.
+\par
+The low-level \ac{HOG} implementation is provided by the Exemplar-SVM framework \cite{Malisiewicz2011}. This implementation produces a feature pyramid with $31$ dimensional features at different scales $S$.
+
+\begin{equation}
+S = \{s|s = \frac{1}{2^{0.1 * (i-1)}}; i \in \mathbb{N}; 1 \le i \le 100;\}
+\end{equation}
+
+For each level of the pyramid, the input image will be rescaled by the corresponding scale factor $s$, until no features could be extracted or the rescaled image contains less than 5 pixel per dimension.
+\par
+The calculated pyramid is then transfered in a list of feature vectors and their corresponding bounding boxes. This is done by combining the given features at each level of the pyramid into $5\times5$ grids and reshaping them into $775$ dimensional vectors.
+As the experiments were executed with labeled bounding boxes, unnecessary features had to be removed from the list. This is achieved by specifying a pixel-wise boolean mask $M_p$ for the desired image regions. The mask will be transformed into a cell-wise $M_c$ at each scale $s$. This is done by a standard bicubic kernel convolution as in \eqnref{bicubic_kernel}.
+
+\begin{equation}
+k_x = \begin{cases}
+(a+2)|x|^3-(a+3)|x|^2+1 & \text{for } |x| \leq 1 \\
+a|x|^3-5a|x|^2+8a|x|-4a & \text{for } 1 < |x| < 2 \\
+0                       & \text{otherwise}
+\end{cases}
+\label{eqn:bicubic_kernel}
+\end{equation}
+with $a=-0.5$ in the \MATLAB implementation\footnote{Implemented in \textit{toolbox/images/images/imresize.m}}. With this mask, all feature patches which are not fully covered by the mask were discarded.
+\par
+For the initial tests, a simple \acf{NN} approach with euclidean distances were used to compute the similarity between different codebooks.
+
+This was done by selecting each labeled bounding box of each test image, computation of the features (\ac{HOG} and whitened \ac{HOG}), assignment to the clusters (either \ac{NN} in terms of k-means or by computing the fisher vector) and comparing it to the codebooks of the remaining image bounding boxes. For a visual verification, the 15 nearest parts were shown aside the query image.
+% searching for representative clusters
+% maintaining location information (parts)
+
+\section{Scoring the part candiates}
+
+% svm
+
+\section{Reducing the computational overhead}
+
+% integral image
+
+\section{Optimizing the score output}
+
+% gaussian fit + rho adjust
+
+\section{Reducing the memory usage}
+
+% kd - tree
