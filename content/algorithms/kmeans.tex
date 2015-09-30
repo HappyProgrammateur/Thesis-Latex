@@ -7,7 +7,7 @@ S_i^{(t)} = \big \{ x_p : \big \| x_p - \mu^{(t)}_i \big \|^2 \le \big \| x_p - 
 \label{eqn:kmeans_assign_step}
 \end{equation}
 
-Afterwards, the center-points are repositioned by calculating the mean of the assigned observations to the respective center-points (see equation \ref{eqn:kmeans_update_step}).
+Afterwards, the center-points are repositioned by calculating the mean of the assigned observations to the respective center-points (see \eqnref{kmeans_update_step}).
 
 \begin{equation}
 \mu^{(t+1)}_i = \frac{1}{|S^{(t)}_i|} \sum_{x_j \in S^{(t)}_i} x_j
@@ -15,6 +15,8 @@ Afterwards, the center-points are repositioned by calculating the mean of the as
 \end{equation}
 
 The update process reoccurs until all observations remain at the assigned center-points and therefore the center-points would not be updated anymore.
+
+% sample images
 
 This means that the k-means algorithm tries to optimize the objective function \ref{eqn:kmeans_objective_function}. As there are only a finite number of possible assignments for the amount of centroids and observations available and each iteration has to result in better solution, the algorithm always ends in a local minimum.
 
@@ -31,3 +33,6 @@ r_{nk} = \begin{cases}
 0 & \text{otherwise}
 \end{cases}
 \]
+
+% minimize graph image
+

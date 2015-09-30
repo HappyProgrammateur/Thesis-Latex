@@ -7,5 +7,8 @@ Structure
     - HoG
 - Clustering
     - kMeans
+- Observations
+- Optimizations
+    - GPU
 - Results
 - Conclusion
