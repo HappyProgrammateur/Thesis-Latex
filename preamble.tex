@@ -20,16 +20,23 @@
 
 % Dokumentdaten
 \newcommand{\docTitle}{Efficient Large Scale Part Retrieval}
-%\newcommand{\docUntertitle}{} % Kein Untertitel
-\newcommand{\docUntertitle}{?}
+\newcommand{\docUntertitle}{} % Kein Untertitel
 % Arten der Arbeit: Bachelorthesis, Masterthesis, Seminararbeit, Diplomarbeit
 \newcommand{\docArtDerArbeit}{Masterthesis}
 %Studiengaenge: Allgemeine Informatik Bachelor, Computer Networking Bachelor,
 % Software-Produktmanagement Bachelor, Advanced Computer Science Master
 \newcommand{\docStudiengang}{Applied Computer Science}
 \newcommand{\docAbgabedatum}{31.10.2015}
+\newcommand{\docAbgabejahr}{2015}
 \newcommand{\docErsterReferent}{Prof. Dr. Björn Ommer}
-\newcommand{\docZweiterReferent}{Masato Takami}
+%\newcommand{\docZweiterReferent}{Masato Takami}
+\newcommand{\docFakultaet}{Faculty of Mathematics and Computer Science}
+\newcommand{\docUniversitaet}{University of Heidelberg}
+\newcommand{\docInstitut}{Heidelberg Collaboratory for Image Processing\\
+Computer Vision group}
+\newcommand{\docGeburtsort}{Lörrach}
+
+
 
 % ##################################################
 % Allgemeine Pakete
@@ -148,17 +155,17 @@
 % ##################################################
 \usepackage{prettyref}
 %%% Für Kapitel %%%
-\newrefformat{cha}{Kapitel~\ref{#1} ab Seite \pageref{#1}}
+\newrefformat{cha}{Chapter~\ref{#1} from page\pageref{#1}}
 %%% Für Abschnitte %%%
-\newrefformat{sec}{Abschnitt~\ref{#1} auf Seite \pageref{#1}}
+\newrefformat{sec}{Paragraph~\ref{#1} at page \pageref{#1}}
 %%% Für Abbildungen %%%
-\newrefformat{fig}{Abbildung~\ref{#1} auf Seite \pageref{#1}}
+\newrefformat{fig}{Figure~\ref{#1} at page \pageref{#1}}
 %%% Für Tabellen %%%
-\newrefformat{tab}{Tabelle~\ref{#1} auf Seite \pageref{#1}} 
+\newrefformat{tab}{Table~\ref{#1} at page \pageref{#1}} 
 %%% Für Listings %%%
-\newrefformat{lst}{Listing~\ref{#1} auf Seite \pageref{#1}} 
+\newrefformat{lst}{Listing~\ref{#1} at page \pageref{#1}} 
 %%% Für Algorithmen %%%
-\newrefformat{alg}{Algorithmus~\ref{#1} auf Seite \pageref{#1}} 
+\newrefformat{alg}{Algorithm~\ref{#1} at page \pageref{#1}} 
 
 % ##################################################
 % Inhaltsverzeichnis / Allgemeine Verzeichniseinstellungen
@@ -195,7 +202,7 @@
 \counterwithout{figure}{chapter}
 
 % Abbildungsverzeichnis anpassen
-%\renewcommand{\cftfigpresnum}{Abbildung }
+\renewcommand{\cftfigpresnum}{Figure }
 \renewcommand{\cftfigaftersnum}{:}
 
 % Breite des Nummerierungsbereiches [Abbildung 1:]
@@ -218,7 +225,7 @@
 \counterwithout{table}{chapter}
 
 % Tabellenverzeichnis anpassen
-%\renewcommand{\cfttabpresnum}{Tabelle }
+\renewcommand{\cfttabpresnum}{Table }
 \renewcommand{\cfttabaftersnum}{:}
 
 % Breite des Nummerierungsbereiches [Abbildung 1:]
@@ -240,7 +247,7 @@
 
 \usepackage{listings}
 \lstset{
-	language=java,
+	language=matlab,
 	backgroundcolor=\color{white},
 	breaklines=true,
 	prebreak={\carriagereturn},
@@ -276,7 +283,7 @@
 \addbibresource{bibtex/library.bib}
 
 % ##################################################
-% PDF / Dokumenteninternelinks
+% pdf / Dokumenteninternelinks
 % ##################################################
 
 \usepackage[
@@ -315,7 +322,7 @@
 % ##################################################
 % Layout
 % ##################################################
-\floatname{algorithm}{Algorithmus}
+\floatname{algorithm}{Algorithm}
 \floatsetup[algorithm]{capposition=top}
 \floatsetup[table]{capposition=top}
 \floatsetup[figure]{capposition=top}

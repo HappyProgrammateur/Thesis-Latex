@@ -4,20 +4,37 @@
 % ##################################################
 % Uni HD-Logo einbinden
 % ##################################################
-\begin{flushright}
+%\begin{flushright}
 \begin{figure}[ht]
-\flushright
+%\flushright
 \includegraphics[height=3cm]{content/pictures/hd_siegel.eps}
 \end{figure}
-\end{flushright}
+%\end{flushright}
+
+
+\begin{center}
+	\renewcommand{\baselinestretch}{2.00}
+	\Large\sffamily
+	\docFakultaet \\
+	\large \docUniversitaet
+	\par\vfill\normalfont
+	\docArtDerArbeit \\
+	in \docStudiengang\\
+	submitted by\\
+	\docVorname~\docNachname\\
+	born in \docGeburtsort\\
+	\docAbgabejahr
+\end{center}
+\newpage
+
 
 % ##################################################
 % Titel
 % ##################################################
 \begin{center}
 {\fontsize{18}{22} \selectfont \docArtDerArbeit}\\[5mm]
-{\fontsize{18}{22} \selectfont in} \\[5mm]
-{\fontsize{18}{22} \selectfont \docStudiengang}\\
+{\fontsize{18}{22} \selectfont at the} \\[5mm]
+{\fontsize{18}{22} \selectfont \docInstitut}\\
 \vspace{1cm}
 \begin{onehalfspace}
 {\fontsize{22}{26} \selectfont \textbf{\docTitle}}\\[5mm]
@@ -33,16 +50,14 @@
 \vfill
 \begin{center}
 \begin{tabular}{lcl}
-Betreuer  	&:& \docErsterReferent 	\\ 
-                 &&\\
-Zweitbetreuer	&:& \docZweiterReferent \\ 
-                 &&\\
-Vorgelegt am 	&:& \docAbgabedatum 	\\ 
-                 &&\\
-Vorgelegt von 	&:& \docVorname~\docNachname\\
-		& & Matrikelnummer: \docMatrikelnummer\\
-		& & \docStrasse,~\docPlz~\docOrt	\\
-		& & \docEmail\\
+Supervisor  	&:& \docErsterReferent 	\\ 
+                & &\\
+Submitted at 	&:& \docAbgabedatum 	\\ 
+                & &\\
+Carried out by 	&:& \docVorname~\docNachname\\
+				& & Student number: \docMatrikelnummer\\
+				& & \docStrasse,~\docPlz~\docOrt	\\
+				& & \docEmail\\
 \end{tabular}
 \end{center}
 \end{titlepage}
