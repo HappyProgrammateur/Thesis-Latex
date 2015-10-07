@@ -1,3 +1,6 @@
+% !TeX encoding = UTF-8
+% !TeX root = ../main.tex
+% !TeX spellcheck = en_US
 \chapter{Work}
 \label{cha:work}
 
@@ -36,21 +39,76 @@ a|x|^3-5a|x|^2+8a|x|-4a & \text{for } 1 < |x| < 2 \\
 \end{cases}
 \label{eqn:bicubic_kernel}
 \end{equation}
-with $a=-0.5$ in the \MATLAB implementation\footnote{Implemented in \textit{toolbox/images/images/imresize.m}}. With this mask, all feature patches which are not fully covered by the mask were discarded.
+
+with $a=-0.5$ in the \MATLAB implementation\footnote{Implemented in the \textit{toolbox/images/images/imresize.m} file in the \MATLAB installation directory}. With this mask, all feature patches which are not fully covered by the mask were discarded.
 \par
 For the initial tests, a simple \acf{NN} approach with euclidean distances were used to compute the similarity between different codebooks.
 
-This was done by selecting each labeled bounding box of each test image, computation of the features (\ac{HOG} and whitened \ac{HOG}), assignment to the clusters (either \ac{NN} in terms of k-means or by computing the fisher vector) and comparing it to the codebooks of the remaining image bounding boxes. For a visual verification, the 15 nearest parts were shown aside the query image.
-% searching for representative clusters
-% maintaining location information (parts)
+This was done by selecting each labeled bounding box of each test image, computing the features $X$ (\ac{HOG} and whitened \ac{HOG}), assign them to the clusters by the corresponding centroids $C$ (either \ac{NN} in terms of k-means or by computing the fisher vector) and comparing it to the codebooks of the remaining image bounding boxes.
 
-\section{Scoring the part candiates}
+%TODO algorithm or formular???
+\begin{algorithm}
+	\KwIn{$X$: Features extracted from a bounding box, $C$: Cluster centroids}
+	\KwOut{$c$: codebook representing the given features}
+	\KwData{$D$: distance vector of each feature to its nearest centroid, $I$: assignment vector of each feature to its nearest centroid}
+	$D, I \gets \text{NearestNeighbourSearch}(X, C)$\;
+	
+	\ForEach{$d$ of $D$ and $i$ of $I$}{
+		$c_i \gets c_i + \frac{1}{d}$\;
+	}
+	\caption{Computing codebook from features}
+	\label{alg:codebook_calc}
+\end{algorithm}
+
+\begin{align}
+	I_j &= \arg \min_i ||X_j - C_i||_2 \\
+	D_j &= \min_i ||X_j - C_i||_2 \\
+	c_i &= \sum_{I_j = i} \frac{1}{D_j}
+	\label{eqn:codebook_calc}
+\end{align}
+
+For a visual verification, the 15 nearest parts were shown aside to the query image. The distance between two different codebooks $c_1$ and $c_2$ was computed by the euclidean distance equation $||c_1-c_2||_2$.
+%TODO beispiel bild
+% searching for representative clusters (nn-iter)
+For each query image, the most shared codebook dimensions and their respective patches were marked inside the images. It could be clearly seen that the patches with a comparable visual representation share the same cluster and (from a human perspective) seem to be representative for the chosen object class.
+%TODO Bild mit markierung, oder auf vorheriges verweisen
+To prove this assumption, an iterative \ac{NN} was implemented. It consists of several rounds, each executing a \ac{NN} search over the available patches and sorting the results. After each round, the most common codebook dimensions of the first $k$ patches were taken whilst the remaining ones were removed (set to zero) as described by \prettyref{alg:iterative_nn}.
+
+\begin{algorithm}
+	\SetKwProg{Fn}{Function}{}{end}
+	\Fn{IterNearestNeighbour($q$ : query codebook, $R$ : remaining codebooks, k)}{
+		\Repeat{no changes}{
+			$D \gets \text{NearestNeighbourSearch}(R, q)$\;
+			
+			Sort $R$ based on $D$\;
+			
+			\tcc{$ij$ denotes dimension $i$ in codebook $j$}
+			
+			$S = \{i | \forall R_{ij} \ne 0; 0 < j < k\}$\;
+			
+			$R \gets R_{ij}$ set to $0$ if $i \notin S$\;
+		}
+		\Return{Sorted $R$}
+	}
+	\caption{Iterative \ac{NN}}
+	\label{alg:iterative_nn}
+\end{algorithm}
+
+By using this algorithm, it could be shown that the most representative patches were assigned to the same clusters, as more similar objects are pulled together at each iteration.
+%TODO bilder fuer verschiedene iterationen 
+
+\par
+% maintaining location information (parts)
+As the reduction of several feature vectors to a single codebook for a whole bounding box eliminates the locational information, the implementation was extended to maintain some locational information by splitting the bounding box in several parts and computing a codebook for each of them. Afterwards, these codebooks are concatenated, which means that the size of a representative codebook for a whole bounding box is calculated by $numberOfParts * numberOfDimensions$. This change brought additional performance gains in terms of detecting similar parts, but also increased the memory usage significantly. During the rest of the experiments, the bounding boxes were either split into a two-by-two grid (as it seemed to be the best mix of performance gain and memory usage) or left as one for later comparisons.
+
+\section{Scoring the part candidates}
 
 % svm
 
 \section{Reducing the computational overhead}
 
 % integral image
+% no libsvm classify
 
 \section{Optimizing the score output}
 
@@ -59,3 +117,6 @@ This was done by selecting each labeled bounding box of each test image, computa
 \section{Reducing the memory usage}
 
 % kd - tree
+% sparse matrix
+% overwrite
+% sum
