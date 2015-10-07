@@ -87,7 +87,7 @@ Computer Vision group}
 % Pseudocode
 %\usepackage[boxed]{algorithm}
 %\usepackage{algpseudocode}
-\usepackage{algorithm2e}
+\usepackage[boxed,algochapter,linesnumbered]{algorithm2e}
 
 % ##################################################
 % Seitenformatierung
@@ -168,6 +168,8 @@ Computer Vision group}
 \newrefformat{lst}{listing~\ref{#1} at page \pageref{#1}} 
 %%% Für Algorithmen %%%
 \newrefformat{alg}{algorithm~\ref{#1} at page \pageref{#1}} 
+%%% Für Formeln %%%
+\newrefformat{eqn}{equation~\ref{#1} at page \pageref{#1}} 
 
 % ##################################################
 % Inhaltsverzeichnis / Allgemeine Verzeichniseinstellungen
@@ -304,6 +306,8 @@ Computer Vision group}
     pdftitle ={\docTitle},
     pdfauthor={\docName},
     pdfcreator={\docName},
+    pdfproducer={},
+    pdfcreator={},
     hidelinks=true %set true for hiding link colors and borders
     ]{hyperref}
     
@@ -324,10 +328,10 @@ Computer Vision group}
 % ##################################################
 % Layout
 % ##################################################
-\floatname{algorithm}{Algorithm}
-\floatsetup[algorithm]{capposition=top}
-\floatsetup[table]{capposition=top}
-\floatsetup[figure]{capposition=top}
+%\floatname{algorithm}{Algorithm}
+%\floatsetup[algorithm]{capposition=top}
+%\floatsetup[table]{capposition=top}
+%\floatsetup[figure]{capposition=top}
 
 
 \input{commands}
