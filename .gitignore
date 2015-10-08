@@ -38,3 +38,5 @@
 *.tdo
 /*.pdf
 *-blx.bib
+/_minted-*
+*.loa

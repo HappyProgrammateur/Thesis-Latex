@@ -103,7 +103,11 @@ As the reduction of several feature vectors to a single codebook for a whole bou
 
 \section{Scoring the part candidates}
 
-As the direct comparison via a \ac{NN} approach did not provided the desired performance and also resulted in a time consuming task if the amount of codebooks increases, another approach was required. One possible solution for detecting similar vectors is a \ac{SVM} based classifier (for a more detailed description about \acp{SVM} see \prettyref{sec:svm}). In this particular case a one-vs-call classifier was used. In this type only one classifier is trained to determine if a given vector is part of one class or part of all other possible classes. The positive class is represented by the query codebook, whilst all other classes are represented by a previously collected list of codebooks. To generate this list, a set of sliding windows were calculated for each image in the database based on algorithm \ref{alg:calc_windows}. With this list, all feature patches are assigned to these windows where their center is placed in. For each window, a codebook is calculated by equation \ref{eqn:codebook_calc}. The resulting list of codebooks is stored and loaded during the \ac{SVM} training and used as the negative training set.
+% svm
+
+As the direct comparison via a \ac{NN} approach did not provided the desired performance and also resulted in a time consuming task if the amount of codebooks increases, another approach was required. One possible solution for detecting similar vectors is a \ac{SVM} based classifier (for a more detailed description about \acp{SVM} see \prettyref{sec:svm}). In this particular case a C-SVC classifier was trained \cite{boser1992training} \cite{cortes1995support}.
+%In this particular case a one-vs-call classifier was used. In this type only one classifier is trained to determine if a given vector is part of one class or part of all other possible classes.
+The positive class is represented by the query codebook, whilst all other classes are represented by a previously collected list of codebooks. To generate this list, a set of sliding windows were calculated for each image in the database based on algorithm \ref{alg:calc_windows}.
 
 \begin{algorithm}
     \KwIn{$I$: image}
@@ -125,15 +129,85 @@ As the direct comparison via a \ac{NN} approach did not provided the desired per
     \caption{Calculation of sliding windows}
     \label{alg:calc_windows}
 \end{algorithm}
-% svm
+
+With this list, all feature patches are assigned to these windows where their center is placed in. For each window, a codebook is calculated by equation \ref{eqn:codebook_calc}. The resulting list of codebooks is stored and loaded during the \ac{SVM} training and used as the negative training set. The \ac{SVM} training was done by the libsvm library \cite{Chang:2011:LLS:1961189.1961199} by using the \texttt{svmtrain} function. The parameters for the training are the same as for the ExemplarSVM library \cite{Malisiewicz2011} (see table \ref{tab:libsvm_train_params}).
+
+\begin{table}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Parameter} & \textbf{Value} \\ 
+        \hline
+        SVM-Type           & C-SVC \\ 
+        \hline
+        Kernel-Type        & Linear ($u^T*v$) \\ 
+        \hline
+        Cost ($C$ of C-SVC)  & $0.01$ \\ 
+        \hline
+        Weight of positive sample ($weight*C$) & $50$ \\ 
+        \hline
+    \end{tabular}
+    \caption{libsvm parameters}
+    \label{tab:libsvm_train_params}
+\end{table}
+
+Other assignment methods were also evaluated, including multi assignments like assigning a feature to every window were a corner is located in, or to every window which contains a minimum amount of the patch (e.g. 30\% of its area). These approaches did not provide enough performance gain in comparison to the computational overhead. Another approach was the usage of the bottom right corner, which obviously led to the fact that the detection candidates were slightly shifted to the bottom right compared to an optimum detection. 
+
+In the first place, the classification function provided by libsvm\footnote{\texttt{svmpredict(\dots)}} was used. With an increasing amount of codebooks which have to be classified by the \ac{SVM}, the function toked a big part of the computation time. By replacing the function with the \MATLAB implementation ($codebooks * (svm_{vectors}^T * svm_{coefficents}) - svm_{\rho}$) (see \prettyref{lst:matlab_svm_predict}), the computation time could be reduced from approximate 150 seconds to 3 seconds with 250,000 codebooks (5,000 windows in 50 images).
+
+\begin{listing}
+\begin{minted}{matlab}
+weights = m.SVs' * m.sv_coef;
+
+if size(codebooks, 2) == size(weights, 1)
+    scores = codebooks * weights - m.rho;
+else
+    scores = codebooks' * weights - m.rho;
+end
+nans = isnan(scores);
+debg('%d NaNs produced!', sum(nans))
+scores(nans) = -999;
+\end{minted}
+\caption{\MATLAB variant of svmpredict}
+\label{lst:matlab_svm_predict}
+\end{listing}
 
 \section{Reducing the computational overhead}
 
 % integral image
+During the shift from the initial tests involving the usage of labeled bounding boxes to the actual requirement of finding parts inside of image databases, the amount of computational overhead increased significantly as it requires to compute sliding windows on each image in the database and their codebooks respectively.
+
+Therefore the idea came up to precompute the codebooks and only load them at runtime for comparison. One solution would be to compute a set of possible windows and their codebooks. At query time the best matching window ratios could be loaded and compared to the query codebook. Unfortunately was the performance dramatically decreased with this approach.
+
+The second solution was to create integral images based on codebooks. Integral images were described by Viola and Jones in 2001 \cite{viola2001rapid}. Such images are created by summing up all pixel values from the top left to the bottom right (or any other diagonal direction). The advantage of this approach is the possibility to compute a sum value for a rectangular area by summing and subtracting the values of the four corners as described in figure \ref{fig:integral_image}. 
+
+\begin{figure}
+\begin{tikzpicture}
+\draw (0,0) rectangle (5,5);
+\draw[fill=blue] (0,5) rectangle (2,4);
+\draw (1.75, 4.25)  node[white] {$A$};
+\draw[fill=red] (2,5) rectangle (4,4);
+\draw (4.25, 4.25)  node{$B$};
+\draw[fill=yellow] (0,4) rectangle (2,3);
+\draw (1.75, 2.75)  node{$C$};
+\draw[fill=green] (2,4) rectangle (4,3);
+\draw (4.25, 2.75)  node{$D$};
+\end{tikzpicture}
+\caption[Sum of area in integral image]{The sum of all values in the green area could be computed by $A+D-(C+B)$. $A$ is the sum of all pixels in the blue area, $B$ the sum of the pixels in the blue and the red areas, $C$ the sum of all pixels in the blue and yellow areas, $D$ of the green, red, blue and yellow respectively}
+\label{fig:integral_image}
+\end{figure}
+
+The difference to \cite{viola2001rapid} is that one pixel at a time is represented by a complete codebook, therefore an integral image per codebook dimension has to be computed. The source image is created by adding the inverse distance of each feature patch center to its nearest cluster centroid to the corresponding codebook dimension. Afterwards, a cumulative sum over the two image axes is computed. The benefit of using integral images is that at runtime, every possible window could be computed by four reads (the corners), one sum and two subtractions between the codebooks. This reduced the computational time at the query stage to 1-2 seconds with a $500\times375$ image, 1000 codebook dimensions and 5000 windows with a 2-by-2 grid.
+
+The downside is the memory usage, which increased dramatically. For example, a $500 \times 375 \times 1000$ integral image requires with the double datatype at least 1.4 gigabytes of data (without any meta information stored aside by matlab). The 50 images test database required therefore at least 70 gigabytes of RAM storage during the query. This also led to the problem of the time required to load the whole database. By storing it in the \MATLAB 7.3 file format, which effectively is a slightly modified HDF5 \cite{hdf5}, the program requires in average 900 seconds to load the whole database from a network shared filesystem.
+
+This method also enabled the extraction of the query codebook from an image contained in the database without any feature or codebook computations. The reduced computational effort during the query phase consist therefore in extracting the query codebook from the database, training of the \ac{SVM}, calculating the sliding windows, extracting the codebook for each window in each image and scoring the codebooks by the trained \ac{SVM}.
 % no libsvm classify
 
 \section{Optimizing the score output}
 
+%TODO non max suppression
+
+The experiments showed that the \ac{SVM} output does not provide a clear separation threshold to identify positive candidates over all images in the database. The scores varied between -2 and 1 for the best matching candidates. As the candidates were most of the time correctly ordered by their visual similarity to the query image, this would not be a problem under the assumption that every image contain at least one area which is similar to the query image part. In this case, the scores could be normalized at an image level, which means that significant higher scores compared to the arithmetic mean. %TODO bild von score histogram
 % gaussian fit + rho adjust
 
 \section{Reducing the memory usage}
@@ -142,3 +216,5 @@ As the direct comparison via a \ac{NN} approach did not provided the desired per
 % sparse matrix
 % overwrite
 % sum
+
+\section{The framwork}

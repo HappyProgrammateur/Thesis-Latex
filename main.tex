@@ -6,8 +6,8 @@
 	index=totoc,
 	%ngerman,
 	openright,
-	%final
-	draft
+	final
+	%draft
 	]{scrbook}
 
 \usepackage[T1]{fontenc}
@@ -78,10 +78,16 @@
 \listoftables
 \cleardoubleemptypage
 
-\fi
+\phantomsection
+\addcontentsline{toc}{chapter}{\listalgorithmcfname}
+\listofalgorithms
+\cleardoubleemptypage
+
 
 % Abkürzungsverzeichnis
 \include{content/abbreviations}
+
+\fi
 
 \mainmatter
 
@@ -111,7 +117,7 @@
 %\bibliographystyle{alphadin}
 %\bibliography{bibtex}
 \printbibliography
-\nocite{*} % include all bibs
+%\nocite{*} % include all bibs
 
 % Eidesstattliche Erklärung
 \include{content/affirmation}
