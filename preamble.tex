@@ -250,42 +250,43 @@ Computer Vision group}
 % Listings (Quellcode)
 % ##################################################
 
-%\usepackage{listings}
-%\lstset{
-%	language=matlab,
-%	backgroundcolor=\color{white},
-%	breaklines=true,
+\usepackage{listings}
+\lstset{
+	language=matlab,
+	backgroundcolor=\color{white},
+	breaklines=true,
 %	prebreak={\carriagereturn},
-% 	breakautoindent=true,
-% 	numbers=left,
-% 	numberstyle=\tiny,
-%% 	stepnumber=2,
-% 	numbersep=5pt,
-% 	keywordstyle=\color{blue},
-%   	commentstyle=\color{green},   
-%   	stringstyle=\color{gray}
-%}
-
-\usepackage[chapter]{minted}
-\setminted[matlab]{
-    autogobble=true,
-    linenos=true,
-    frame=single,
-    style=friendly
+ 	breakautoindent=true,
+ 	numbers=left,
+ 	numberstyle=\scriptsize,
+ 	numbersep=5pt,
+ 	keywordstyle=\color{blue},
+    commentstyle=\color{gray},   
+    stringstyle=\color{purple},
+    frame=shadowbox,
+    captionpos=b
 }
-\newminted{matlab}{}
+
+%\usepackage[chapter]{minted}
+%\setminted[matlab]{
+%    autogobble=true,
+%    linenos=true,
+%    frame=single,
+%    style=friendly
+%}
+%\newminted{matlab}{}
 % ##################################################
 % Theoreme
 % ##################################################
   	
 % Umgebung fuer Beispiele
-\newtheorem{beispiel}{Beispiel}
+%\newtheorem{beispiel}{Beispiel}
 
 % Umgebung fuer These
-\newtheorem{these}{These}
+%\newtheorem{these}{These}
 
 % Umgebung fuer Definitionen
-\newtheorem{definition}{Definition}
+%\newtheorem{definition}{Definition}
   	
 % ##################################################
 % Literaturverzeichnis
