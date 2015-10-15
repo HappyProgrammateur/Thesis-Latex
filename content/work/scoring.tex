@@ -1,0 +1,97 @@
+\section{Scoring the part candidates}
+
+% svm
+
+As the direct comparison via a \ac{NN} approach did not provided the desired performance and also resulted in a time consuming task if the amount of codebooks increases, another approach was required. One possible solution for detecting similar vectors is a \ac{SVM} based classifier (for a more detailed description about \acp{SVM} see \prettyref{sec:svm}). In this particular case a \ac{C-SVC} was trained \cite{Chang:2011:LLS:1961189.1961199} \cite{boser1992training} \cite{cortes1995support}.
+
+\Iac{C-SVC} tries to solve the optimization problem \ref{eqn:c-svc_problem} where $x_i \in \mathbb{R}^n, i = 1, \dots, l$ denotes the training vectors, $y \in \mathbb{R}^l, y_i \in \{-1, 1\}$ an indication vector and $\phi(x_i)$ as a mapping of $x_i$ to a higher dimensional space.
+
+\begin{align}
+\min_{\omega, b, \xi} &\frac{1}{2} \omega^T \omega + C \sum_{i=1}^{l} \xi_i 
+    \label{eqn:c-svc_problem} \\
+\text{subject to } &y_i(\omega^T \phi(x_i) + b) \ge 1 - \xi_i, \nonumber \\
+                   &\xi \ge 0, i = 1, \dots, l \nonumber
+\end{align}
+
+As $\omega$ usually has a high dimensionality, the following dual problem has to be solved:
+
+\begin{align}
+\min_\alpha & \frac{1}{2} \alpha^T Q \alpha - e^T \alpha 
+    \label{eqn:c-svc_dual_problem} \\
+\text{subject to } & y^T \alpha = 0 \nonumber \\
+                   & 0 \le \alpha_i \le C, i = 1, \dots, l \nonumber
+\end{align}
+
+with $e = [1, \dots, 1]^T$ as a vector of ones, $Q$ as a $l \times l$ semidefinite matrix ($Q_{ij} = y_i y_j K(x_i, x_j)$) and $K(x_i, x_j) = \phi(x_i)^T \phi(x_j)$ as kernel function.
+By solving problem \ref{eqn:c-svc_dual_problem} the $\omega$ satisfies 
+
+\begin{equation}
+\omega = \sum_{i=1}^{l} y_i \alpha_i \phi(x_i)
+\end{equation}
+
+because of the primal-dual relationship \cite{UBHD-66487423}. Additionally the decision function is defined as
+
+\begin{equation}
+sgn(\sigma^T \phi(x) + b) = sgn(\sum_{i=1}^{l} y_i \alpha_i K(x_i, x) + b).
+\end{equation}
+
+The positive class is represented by the query codebook, whilst all other classes are represented by a previously collected list of codebooks. To generate this list, a set of sliding windows were calculated for each image in the database based on \algref{calc_windows}.
+
+\begin{algorithm}
+    \KwIn{$I$: image}
+    \KwOut{calculated windows}
+    $w_I \gets \text{width of }I$\;
+    $h_I \gets \text{height of }I$\;
+    $S \gets \{s^2 | s \in \mathbb{N}, s \le 10 \}$\;
+    $x \gets \{1, 11, 21, 31,\dots, w_I\}$\;
+    $y \gets \{1, 11, 21, 31,\dots, h_I\}$\;
+    \Repeat{$w_w >= w_I$ or $h_w >= h_I$ or no elements left in $S$}{
+        $currentScale \gets \text{next element of }S$\;
+        $w_w \gets 32 * currentScale$\;
+        $h_w \gets 32 * currentScale$\;
+        
+        \ForEach{Combination $x_i, y_i$ of $x$ and $y$}{
+            Add window $x_i, y_i, x_i + w_w, y_i + h_w$ to the list\;
+        }
+    }
+    \caption{Calculation of sliding windows}
+    \label{alg:calc_windows}
+\end{algorithm}
+
+With this list, all feature patches are assigned to these windows where their center is placed in. For each window, a codebook is calculated by the equations \ref{eqn:codebook_calc1} to \ref{eqn:codebook_calc3}. The resulting list of codebooks is stored and loaded during the \ac{SVM} training and used as the negative training set. If the \ac{VOC2011} class is available for the query image part, the negative set can additionally restricted to windows not containing bounding boxes assigned to the same class as the query part. This is accomplished by setting an appropriate mask for the \verb|getHogsInsideBox| function. The \ac{SVM} training was done by the libsvm library \cite{Chang:2011:LLS:1961189.1961199} by using the \texttt{svmtrain} function. The parameters for the training are the same as for the ExemplarSVM library \cite{Malisiewicz2011} (see \tabref{libsvm_train_params}).
+
+\begin{table}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Parameter}   & \textbf{Value} \\ 
+        \hline
+        SVM-Type             & C-SVC \\ 
+        \hline
+        Kernel-Type          & Linear ($u^T*v$) \\ 
+        \hline
+        Cost ($C$ of C-SVC)  & $0.01$ \\ 
+        \hline
+        Weight of positive sample ($weight*C$) & $50$ \\ 
+        \hline
+    \end{tabular}
+    \caption{libsvm parameters}
+    \label{tab:libsvm_train_params}
+\end{table}
+
+Other assignment methods were also evaluated, including multi assignments like assigning a feature to every window were a corner is located in, or to every window which contains a minimum amount of the patch (e.g. 30\% of its area). These approaches did not provide enough performance gain in comparison to the computational overhead. Another approach was the usage of the bottom right corner, which obviously led to the fact that the detection candidates were slightly shifted to the bottom right compared to an optimum detection. 
+
+In the first place, the classification function provided by libsvm\footnote{\texttt{svmpredict(\dots)}} was used. With an increasing amount of codebooks which have to be classified by the \ac{SVM}, the function toked a big part of the computation time. By replacing the function with the \MATLAB implementation ($codebooks * (svm_{vectors}^T * svm_{coefficents}) - svm_{\rho}$) (see \prettyref{lst:matlab_svm_predict}), the computation time could be reduced from approximate 150 seconds to 3 seconds with 250,000 codebooks (5,000 windows in 50 images).
+
+
+\begin{lstlisting}[caption={\MATLAB variant of svmpredict},label=lst:matlab_svm_predict]
+weights = m.SVs' * m.sv_coef;
+
+if size(codebooks, 2) == size(weights, 1)
+    scores = codebooks * weights - m.rho;
+else
+    scores = codebooks' * weights - m.rho;
+end
+nans = isnan(scores);
+debg('%d NaNs produced!', sum(nans))
+scores(nans) = -999;
+\end{lstlisting}

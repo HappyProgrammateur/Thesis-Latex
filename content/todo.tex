@@ -2,20 +2,6 @@
 
 
 \section{Extracting HOG based on PASCAL bounding boxes}
-% HOG werden durch exemplar svm geniert
-% maske M_p wird von pixel auf zelle M_c umgerechnet
-\[
-M_c = M_p
-\]
-% mit bicubic kernel convolved
-\[
-k_x = \begin{cases}
-	(a+2)|x|^3-(a+3)|x|^2+1 & \text{for } |x| \leq 1 \\
-	a|x|^3-5a|x|^2+8a|x|-4a & \text{for } 1 < |x| < 2 \\
-	0                       & \text{otherwise}
-\end{cases}; \text{with }a=-0.5\text{ in the \MATLAB implementation}
-\]
-% alle 5x5 bloecke die nicht komplett innerhalb der bbox liegen werden discarded
 
 \section{steps nn}
 \begin{enumerate}
