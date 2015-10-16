@@ -1,0 +1,1767 @@
+
+\subsection{DEMO}
+
+Demo implementation
+
+\paragraph{Syntax:} \verb|demo(train, ...)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+train & boolean to indicate the creation of a image database. Default: false  \\ \hline
+Name & Value pairs to override the default configuration  \\ \hline
+\end{tabular}
+
+\subsection{GENERATECLUSTER}
+
+Generate a cluster model
+
+\paragraph{Syntax:} \verb|cluster_model = generateCluster(params)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+params & Configuration parameters  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+cluster\_model & The model  \\ \hline
+\end{tabular}
+
+\subsection{GETIMAGEDB}
+
+Generate or load the image database
+
+\paragraph{Syntax:} \verb|database = getImageDB(params, cluster_model)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+cluster\_model & The model for codebook generation  \\ \hline
+params & Configuration parameters  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+database & The database of integral images  \\ \hline
+\end{tabular}
+
+\subsection{GETSVM}
+
+Train or load a exemplar SVM
+
+\paragraph{Syntax:} \verb|svm_models = getSVM(params, cluster_model)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+cluster\_model & The model to generate codebooks  \\ \hline
+parms & Configuration parameters  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+svm\_models & SVM model struct  \\ \hline
+\end{tabular}
+
+\subsection{SEARCHINTERACTIVE}
+
+Do a complete interactive database searchAsks the user for a image in the dataset image path.Allows to mark a ROI to search forStores results in the results/queries subdirectories
+
+\paragraph{Syntax:} \verb|searchInteractive(params, cluster_model)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+cluster\_model & The model to generate codebooks  \\ \hline
+params & Configuration parameters  \\ \hline
+\end{tabular}
+
+\subsection{SEARCHDATABASE}
+
+Search the image database with the given SVM modelsStores results in the results/queries subdirectories
+
+\paragraph{Syntax:} \verb|results = searchDatabase(params, database, svm_models, fit_params, roi)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+svm\_models & Struct array of svm models  \\ \hline
+roi & The region of interest [x\_{min}, y\_{min}, x\_{max}, y\_{max}]  \\ \hline
+params & Configuration parameters  \\ \hline
+fit\_params & Gaussian curve 2D Vectors to adjust the SVM scores [$\mu$, $\sigma$]  \\ \hline
+database & The image database as struct array of integral codebook images  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+results & Cell array of results. Fields: curid, img, patch, score  \\ \hline
+\end{tabular}
+
+\subsection{SEARCHDATABASE}
+
+Search the image database with the given SVM modelsStores results in the results/queries subdirectories
+
+\paragraph{Syntax:} \verb|results = searchDatabase(params, database, svm_models, fit_params, roi)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+svm\_models & Struct array of svm models  \\ \hline
+roi & The region of interest [x\_{min}, y\_{min}, x\_{max}, y\_{max}]  \\ \hline
+params & Configuration parameters  \\ \hline
+fit\_params & Gaussian curve 2D Vectors to adjust the SVM scores [$\mu$, $\sigma$]  \\ \hline
+database & The image database as struct array of integral codebook images  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+results & Cell array of results. Fields: curid, img, patch, score  \\ \hline
+\end{tabular}
+
+\subsection{CALIBRATE\_FIT}
+
+Estimates the gaussian parameters for the given svm models
+
+\paragraph{Syntax:} \verb|fit_params = calibrate_fit(params, svm_models, query_file, cluster_model)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+svm\_models & The SVM models  \\ \hline
+cluster\_model & The model to generate the codebooks  \\ \hline
+params & Configuration parameters  \\ \hline
+query\_file & A pascal stream containing the file used to train the SVM  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+fit\_params & Nx2 matrix of gaussian parameters. N: number of SVM models, Gaussian Parameters: [$\mu$, $\sigma$]  \\ \hline
+\end{tabular}
+
+\subsection{CALIBRATE\_RHO}
+
+Tries to readjust the rho of the given SVM models to obtain better scores
+
+\paragraph{Syntax:} \verb|rhos = calibrate_rho(params, svm_models, query_file, cluster_model, ground_truths)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+svm\_models & The SVM models  \\ \hline
+cluster\_model & The model to generate the codebooks  \\ \hline
+ground\_truths & Nx4 Matrix of bounding boxes inside the query image (e.g. the ROI)  \\ \hline
+params & Configuration parameters  \\ \hline
+query\_file & A pascal stream containing the file used to train the SVM  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+rhos & Mx1 vector of new rhos. M: number of SVM models  \\ \hline
+\end{tabular}
+
+\subsection{CONVERT\_SERIALIZE}
+
+Creates a corresponding file with toggled serialization
+
+\paragraph{Syntax:} \verb|convert_serialize(filename)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+filename & The file to invert  \\ \hline
+\end{tabular}
+
+\subsection{GET\_DEFAULT\_CONFIGURATION}
+
+returns a default configuration
+
+\paragraph{Syntax:} \verb|params = get_default_configuration()|
+
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+params & The default configuration  \\ \hline
+\end{tabular}
+
+\subsection{GET\_CODEBOOKS}
+
+Get integral codebooks from given features
+
+\paragraph{Syntax:} \verb|codebooks = get_codebooks(params, features, cluster_model)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+features & A feature struct array. Required Fields: curid, X, bbs, window2feature  \\ \hline
+cluster\_model & A model from get\_cluster  \\ \hline
+params & Configuration struct  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+codebooks & A struct array with fields: I, curid, size  \\ \hline
+\end{tabular}
+
+\subsection{GET\_CODEBOOK\_INTEGRALS}
+
+Get integral codebooks from given features
+
+\paragraph{Syntax:} \verb|integrals = get_codebook_integrals(params, features, cluster_model, roi_size)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+features & A feature struct array. Required Fields: curid, X, bbs, I\_size, scales  \\ \hline
+cluster\_model & A model from get\_cluster  \\ \hline
+params & Configuration struct  \\ \hline
+roi\_size & Size of the query part  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+integrals & A struct array with fields: I, I\_size, curid, scale\_factor,max\_size, min\_size, tree,scores, idx, coords  \\ \hline
+\end{tabular}
+
+\subsection{GET\_CACHE\_BASEDIR}
+
+Gets and creates the cache dir
+
+\paragraph{Syntax:} \verb|basedir = get_cache_basedir(params, create_dir)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+create\_dir & Boolean to indicate the automatic creation of the dir  \\ \hline
+params & Configuration struct  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+basedir & The cache dir  \\ \hline
+\end{tabular}
+
+\subsection{GET\_CACHE\_NAME}
+
+Gets the cache filename
+
+\paragraph{Syntax:} \verb|cachename = get_cache_name(params, roi_size, create_dir)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+create\_dir & Boolean to indicate the automatic creation of the dir  \\ \hline
+params & Configuration struct  \\ \hline
+roi\_size & Vector containing the size of the roi or empty  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+cachename & The cache file name  \\ \hline
+\end{tabular}
+
+\subsection{GET\_IMG\_CACHE\_NAME}
+
+Gets the cache filename of a single image
+
+\paragraph{Syntax:} \verb|imgcachename = get_img_cache_name(params, roi_size, create_dir)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+create\_dir & Boolean to indicate the automatic creation of the dir  \\ \hline
+params & Configuration struct  \\ \hline
+roi\_size & Vector containing the size of the roi or empty  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+imgcachename & The cache file name  \\ \hline
+\end{tabular}
+
+\subsection{GET\_CLUSTER}
+
+Clusters the given features with kmeans
+
+\paragraph{Syntax:} \verb|model = get_cluster( params, features )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+features & The feature struct array (Required Fields: X)  \\ \hline
+params & The configuration struct used for caching and profiling  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+model & The computed model (Fields: centroids. Methods: feature2codebook(params, feature), feature2codebookintegral(params, feature))  \\ \hline
+\end{tabular}
+
+\subsection{FEATURE2CODEBOOK}
+
+Calculates a codebook from a given feature struct
+
+\paragraph{Syntax:} \verb|codebook = feature2codebook(params, feature, model)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+model & The cluster model. Required fields: centroids  \\ \hline
+feature & The feature struct. Required fields: X, window2feature, bbs  \\ \hline
+params & The configuration struct. Required fields: parts, codebook\_type, profile (if profiling is required)  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+codebook & A NxM matrix. N: params.parts * size(centroids, 1), M: length(window2feature)  \\ \hline
+\end{tabular}
+
+\subsection{FEATURE2CODEBOOK}
+
+Calculates a codebook integral from a given feature struct
+
+\paragraph{Syntax:} \verb|codebook = feature2codebookintegral(params, feature, model)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+model & The cluster model. Required fields: centroids  \\ \hline
+feature & The feature struct. Required fields: X, bbs, I\_size, scales  \\ \hline
+params & The configuration struct. Required fields: codebook\_type, profile (if profiling is required)  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+scales & A Cell of size S containing the associated scales.  \\ \hline
+codebook & A SxNxWxH matrix. S: different scales, N: size(centroids, 1), W: I\_size(2), H: I\_size(1)  \\ \hline
+\end{tabular}
+
+\subsection{FEATURE2CODEBOOK}
+
+Calculates a codebook integral from a given feature struct
+
+\paragraph{Syntax:} \verb|codebook = feature2codebookintegral(params, feature, model)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+model & The cluster model. Required fields: centroids  \\ \hline
+feature & The feature struct. Required fields: X, bbs, I\_size, scales  \\ \hline
+params & The configuration struct. Required fields: codebook\_type, profile (if profiling is required)  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+scales & A Cell of size S containing the associated scales.  \\ \hline
+codebook & A SxNxWxH matrix. S: different scales, N: size(centroids, 1), W: I\_size(2), H: I\_size(1)  \\ \hline
+\end{tabular}
+
+\subsection{GET\_CODEBOOK\_FROM\_WINDOWS}
+
+Get images codebooks from given features
+
+\paragraph{Syntax:} \verb|images = get_codebook_from_windows(params, features, cluster_model, roi_size)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+features & A feature struct array. Required Fields: curid, X, bbs, I\_size, scales  \\ \hline
+cluster\_model & A model from get\_cluster  \\ \hline
+params & Configuration struct  \\ \hline
+roi\_size & Size of the query part  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+images & A struct array with fields: curid, scale\_factor, max\_size,min\_size, bboxes, codebooks, images  \\ \hline
+\end{tabular}
+
+\subsection{GET\_CACHE\_BASEDIR}
+
+Gets and creates the cache dir
+
+\paragraph{Syntax:} \verb|basedir = get_cache_basedir(params, create_dir)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+create\_dir & Boolean to indicate the automatic creation of the dir  \\ \hline
+params & Configuration struct  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+basedir & The cache dir  \\ \hline
+\end{tabular}
+
+\subsection{GET\_CACHE\_NAME}
+
+Gets the cache filename
+
+\paragraph{Syntax:} \verb|cachename = get_cache_name(params, roi_size, create_dir)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+create\_dir & Boolean to indicate the automatic creation of the dir  \\ \hline
+params & Configuration struct  \\ \hline
+roi\_size & Vector containing the size of the roi or empty  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+cachename & The cache file name  \\ \hline
+\end{tabular}
+
+\subsection{GET\_IMG\_CACHE\_NAME}
+
+Gets the cache filename of a single image
+
+\paragraph{Syntax:} \verb|imgcachename = get_img_cache_name(params, roi_size, create_dir)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+create\_dir & Boolean to indicate the automatic creation of the dir  \\ \hline
+params & Configuration struct  \\ \hline
+roi\_size & Vector containing the size of the roi or empty  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+imgcachename & The cache file name  \\ \hline
+\end{tabular}
+
+\subsection{GET\_IMAGE}
+
+Loads a pascal image by its name
+
+\paragraph{Syntax:} \verb|I = get_image( params, name )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+params & Configuration struct  \\ \hline
+name & The image name  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+I & The loaded image  \\ \hline
+\end{tabular}
+
+\subsection{GET\_FEATURES\_FROM\_STREAM}
+
+Calculates HoG features from a given Pascal Stream
+
+\paragraph{Syntax:} \verb|features = get_features_from_stream( params, stream )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+stream & A Pascal stream  \\ \hline
+params & Configuration struct  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+features & A feature struct array. Fields: curid, objectid,feature\_type, I\_size, X, M, scales, bbs, window2feature,area, all\_scales  \\ \hline
+\end{tabular}
+
+\subsection{EXTRACT\_QUERY\_CODEBOOK}
+
+extracts a query codebook based on the configuration
+
+\paragraph{Syntax:} \verb|query_codebooks = extract_query_codebook( params, cluster_model, query_file, roi_size )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+cluster\_model & Model representing the current clustering method  \\ \hline
+params & Configuration struct  \\ \hline
+roi\_size & Bounding box of the query part  \\ \hline
+query\_file & Struct with information about the query file  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+query\_codebooks & the resulting codebook  \\ \hline
+\end{tabular}
+
+\subsection{PREPARE\_FEATURES}
+
+load or generate features for the given stream set
+
+\paragraph{Syntax:} \verb|features = prepare_features(params, query_stream_set)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+query\_stream\_set & stream set containing the files to load  \\ \hline
+params & Configuration struct  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+features & struct array of features  \\ \hline
+\end{tabular}
+
+\subsection{GET\_FULL\_NEG\_MODEL}
+
+Loads the negative model for whitened HoGs
+
+\paragraph{Syntax:} \verb|neg_model = get_full_neg_model()|
+
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+neg\_model & The negative model  \\ \hline
+\end{tabular}
+
+\subsection{GET\_SVMS}
+
+Get trained exemplar svms from given codebooks
+
+\paragraph{Syntax:} \verb|svm_models = get_svms( params, query_codebooks, neg_codebooks )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+neg\_codebooks & Codebook struct array (Fields: I) or NxM matrix. N: Num codebooks, M: Codebook size  \\ \hline
+params & Configuration struct  \\ \hline
+query\_codebooks & A codebook struct array. Required Fields: I, size, curid  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+svm\_models & Struct array of svm models. Fields: cb\_size, codebook, curid, model  \\ \hline
+\end{tabular}
+
+\subsection{ADJUST\_SCORES}
+
+adjusts scores based on given gaussian fit parametersScores will applied on a gaussian curve. The curve is shifted by $3 * \sigma$and the resulting scores rescaled by $new\_scores * 2 - 1$
+
+\paragraph{Syntax:} \verb|[ new_scores ] = adjust_scores( params, fit_params, scores )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+scores & Score vector to adjust  \\ \hline
+params & Configuration parameters as struct  \\ \hline
+fit\_params & 2D-Vector. [$\mu$, $\sigma$]  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+new\_scores & Adjusted scores  \\ \hline
+\end{tabular}
+
+\subsection{GET\_RANGE\_FOR\_SCALE}
+
+get the range of given scales
+
+\paragraph{Syntax:} \verb|[ min_size, max_size ] = get_range_for_scale(params, current_scales)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+current\_scales & NxM matrix of scales  \\ \hline
+params & Configuration struct  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+max\_size & vector with N maximum values  \\ \hline
+min\_size & vector with N minimum values  \\ \hline
+\end{tabular}
+
+\subsection{FILTER\_FEATURES}
+
+Filters given featuresRemoves features with too little texture or which are too close to the negative mode of whitened features
+
+\paragraph{Syntax:} \verb|features = filter_features(params, features)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+features & The feature struct array (Fields: X, M, distVec, scales, bbs, window2feature)  \\ \hline
+params & The configuration struct. Used for profiling and caching  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+features & The filtered feature struct array with new logical vector deletedFeatures  \\ \hline
+\end{tabular}
+
+\subsection{CALC\_CODEBOOKS}
+
+Extracts codebooks and bounding boxes from a given image database
+
+\paragraph{Syntax:} \verb|[ bboxes, codebooks, images ] = calc_codebooks(params, database, windows_bb, num_parts )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+windows\_bb & A Nx4 matrix of bounding boxes to to extract ($x\_{min}$, $y\_{min}$, $x\_{max}$, $y\_{max}$)  \\ \hline
+num\_parts & (Even) number of segments a window should be divided to  \\ \hline
+params & The configuration parameters, currently only required for profiling  \\ \hline
+database & The image database as struct array with the fields I, curid and optionally scale\_factor  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+images & A 1xN dimensional index vector for assigning codebooks to images  \\ \hline
+bboxes & A Nx4 matrix of bounding boxes related to the extracted codebooks ($x\_{min}$, $y\_{min}$, $x\_{max}$, $y\_{max}$)  \\ \hline
+codebooks & A Nx(M*num\_parts) matrix of M dimensional codebooks  \\ \hline
+\end{tabular}
+
+\subsection{EXPECTEDCODEBOOKS}
+
+Tries to estimate the amount of codebooks extractedInternally used to preallocate the memory for speed
+
+\paragraph{Syntax:} \verb|[expectedCodebookCount, codebookSize] = expectedCodebooks(database, windows_bb, num_parts)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+windows\_bb & A Nx4 matrix of bounding boxes to to extract  \\ \hline
+num\_parts & (Even) number of segments a window should be divided to  \\ \hline
+database & The image database as struct array with the field I  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+expectedCodebookCount & Estimated number of codebooks which will be extracted  \\ \hline
+codebookSize & Size of the resulting codebooks (M*num\_parts)  \\ \hline
+\end{tabular}
+
+\subsection{IS\_IN\_SCALE}
+
+Tests if the requested sizes are within the a given scale
+
+\paragraph{Syntax:} \verb|in_scale = is_in_scale(params, min_size, max_size, requested_size)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+max\_size & upper bound (or [] if lower bound is requested)  \\ \hline
+params & Configuration struct  \\ \hline
+min\_size & lower bound (or [] if upper bound is requested)  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+in\_scale & logic vector  \\ \hline
+\end{tabular}
+
+\subsection{CALC\_WINDOWS}
+
+Calculates the windows wich have to be extracted in a sliding window approach
+
+\paragraph{Syntax:} \verb|windows_bb = calc_windows(params, w, h, cbw, cbh, I )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+cbw & Smallest width of a window  \\ \hline
+cbh & Smallest height of a window  \\ \hline
+I & Optional test image to produce a intagral.avi file for visualization  \\ \hline
+w & Width of the image  \\ \hline
+params & Configuration struct  \\ \hline
+h & Height of the image  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+windows\_bb & Nx4 matrix of windows ($x\_{min}$, $y\_{min}$, $x\_{max}$, $y\_{max}$)  \\ \hline
+\end{tabular}
+
+\subsection{SPARSE\_CODEBOOK}
+
+Matlab implementation of the reconstruction of a kd-Tree integral image
+
+\paragraph{Syntax:} \verb|codebook = sparse_codebook(integral, x, y)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+x, y & Coordinate of requested codebook  \\ \hline
+integral & An integral image with kd-Tree storage backend  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+codebook & the reconstructed codebook  \\ \hline
+\end{tabular}
+
+\subsection{GETCODEBOOKSFROMINTEGRAL}
+
+Extract codebooks from a single integral image
+
+\paragraph{Syntax:} \verb|codebooks = getCodebooksFromIntegral(params, integral_img, bboxes, num_parts)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+bboxes & Mx4 Matrix of bounding boxes to extract  \\ \hline
+num\_parts & (Even) number of segments to divide a single window into  \\ \hline
+integral\_img & SxNxWxH Matrix. S: scales, N: Codebook Size, W: Width, H: Height  \\ \hline
+params & Configuration struct  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+codebooks & N2xSxM Matrix. N2: N*num\_parts  \\ \hline
+\end{tabular}
+
+\subsection{ESTIMATE\_FIT\_PARAMS}
+
+Estimates parameters of a gaussian curveCan be used to adjust the scores
+
+\paragraph{Syntax:} \verb|fit_params = estimate_fit_params( params, scores )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+scores & Score vector to fit to  \\ \hline
+params & Configuration struct (currently not used)  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+fit\_params & 2D-Vector of parameters [$\mu$, $\sigma$]  \\ \hline
+\end{tabular}
+
+\subsection{GETPARTS}
+
+Calculates the segments of a window
+
+\paragraph{Syntax:} \verb|[ xsteps, ysteps ] = getParts( minX, minY, maxX, maxY, num_parts)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+num\_parts & (Even) number of segments  \\ \hline
+minY & Lowest y value  \\ \hline
+maxY & Highest y value  \\ \hline
+minX & Lowest x value  \\ \hline
+maxX & Highest x value  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+ysteps & Y offsets inside the bounding box [[from; to], ...] (2xnum\_parts Matrix)  \\ \hline
+xsteps & X offsets inside the bounding box [[from; to], ...] (2xnum\_parts Matrix)  \\ \hline
+\end{tabular}
+
+\subsection{JOIN\_PART\_COVARIANCES}
+
+Joins multiple small files into one matrix
+
+\paragraph{Syntax:} \verb|neg_model = join_part_covariances(num_parts)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+num\_parts & Number of files to join  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+neg\_model & the negative model for whitened HoGs  \\ \hline
+\end{tabular}
+
+\subsection{REDUCE\_MATCHES}
+
+Reduces the amount of detected matches with a non-max suppression
+
+\paragraph{Syntax:} \verb|[bbox, scores, idx] = reduce_matches(params, bbox, scores)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+bbox & Nx4 matrix of bounding boxes [x, y, w, h]  \\ \hline
+params & Configuration parameters  \\ \hline
+scores & N dimensional vector of scores  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+bbox & New bounding boxes  \\ \hline
+idx & Mapping between input and output (index vector)  \\ \hline
+scores & New scores  \\ \hline
+\end{tabular}
+
+\subsection{GETHOGSINSIDEBOX}
+
+Restrict calculated HoGs to a given mask
+
+\paragraph{Syntax:} \verb|[X, W, M, offsets, uus, vvs, scales] = getHogsInsideBox(t, I, mask, params)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+I & Source image of features  \\ \hline
+mask & logical mask to restrict features (same size as source image)  \\ \hline
+t & Feature pyramid  \\ \hline
+params & Configuration parameters  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+W & wavelet  \\ \hline
+uus & Patch positions  \\ \hline
+offsets & Patch offsets  \\ \hline
+M & Gradient  \\ \hline
+vvs & Patch positions  \\ \hline
+X & Features (Nx775)  \\ \hline
+scales & Patch scales  \\ \hline
+\end{tabular}
+
+\subsection{WHITEN\_FEATURES}
+
+Transforms HoG features into whitened HoGs
+
+\paragraph{Syntax:} \verb|features = whiten_features( params, features )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+features & Feature struct array. Required Fields: X, M  \\ \hline
+params & Configuration struct  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+features & Whitened feature struct array. New Field: distVec  \\ \hline
+\end{tabular}
+
+\subsection{MERGE\_STRUCTS}
+
+Merges multiple structs togetherFields of the first struct gets overriden by the second, the third, ....
+
+\paragraph{Syntax:} \verb|result = merge_structs(struct1, struct2, ...)|
+
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+result & The merged struct  \\ \hline
+\end{tabular}
+
+\subsection{PROFILE\_STEP}
+
+Logs an execution traceLogs where it was called and which time elapsed since the profiling start
+
+\paragraph{Syntax:} \verb|params = profile_log( params )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+params & A configuration struct produced by profile\_start  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+params & The input struct with updated profile.steps field (not required for subsequential calls)  \\ \hline
+\end{tabular}
+
+\subsection{MAKE\_SOUND}
+
+Plays a soundtrack to get attentionCould be used to signal the end of a computation or the presence of an error
+
+\paragraph{Syntax:} \verb|make_sound( finished )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+finished & Boolean, specifies if a gong (false) or a handel (true) should be played  \\ \hline
+\end{tabular}
+
+\subsection{SAVE\_EX}
+
+Advanced wrapper around saveProvides status information and to serialize the variables with hlp\_serialize
+
+\paragraph{Syntax:} \verb|save_ex(filename, save_args, ...)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+save\_args & Variadic arguments for matlabs save function  \\ \hline
+filename & The file to save to  \\ \hline
+\end{tabular}
+
+\subsection{PARSE\_KEYWORDS}
+
+Parses a list of arguments into a structRequires arguments of the form Keyword1, Value1, Keyword2, Value2, ...
+
+\paragraph{Syntax:} \verb|keywords = parse_keywords(input_args, allowed_keywords)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+input\_args & Cell array of input arguments (e.g. varargin)  \\ \hline
+allowed\_keywords & Optional cell array of allowed keywords  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+keywords & Struct of keyword, value pairs  \\ \hline
+\end{tabular}
+
+\subsection{LOAD\_EX}
+
+Advanced load wrapperPrints status information and allows to load files serialized with hlp\_deserializeBehaves exactly like matlabs load function
+
+\paragraph{Syntax:} \verb|out = load_ex(filename, load_arg, ...)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+load\_arg & Optional, variadic arguments for matlabs load function  \\ \hline
+filename & File to load  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+serialized & optional boolean indicating the load of a serialized var  \\ \hline
+out & optional struct containing the loaded variables  \\ \hline
+\end{tabular}
+
+\subsection{STRUCT2STR}
+
+converts a struct into a printable string
+
+\paragraph{Syntax:} \verb|str = struct2str(in, recursive)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+recursive & boolean to indicate a recursive print  \\ \hline
+in & the struct to print  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+str & String containing a text representation of the struct  \\ \hline
+\end{tabular}
+
+\subsection{PROFILE\_STOP}
+
+Stops the profilingRecords the total execution time during the profiling
+
+\paragraph{Syntax:} \verb|profile_stop( params )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+params & The configuration struct processed by profile\_start  \\ \hline
+\end{tabular}
+
+\subsection{PROFILE\_START}
+
+Starts an execution traceupdates the given configuration struct by adding a profile field with subfieldsrecords the start time.
+
+\paragraph{Syntax:} \verb|params = profile_start( params )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+params & A configuration struct with a configured dataset (dataset.localdir field is required)  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+params & The updated struct. Required for profile\_log and profile\_stop calls  \\ \hline
+\end{tabular}
+
+\subsection{ALLOC\_STRUCT\_ARRAY}
+
+Allocates a struct array of given size with given fieldsSorts fieldnames to be in line with matlabs save -struct
+
+\paragraph{Syntax:} \verb|array = alloc_struct_array( size, field, ... )|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+field & Variable number of fields to be contained in the array  \\ \hline
+size & The requested size of the struct array (vector possible)  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+array & The 1xsize struct array  \\ \hline
+\end{tabular}
+
+\subsection{SET\_LOG\_LEVEL}
+
+set current log level
+
+\paragraph{Syntax:} \verb|set_log_level(lvl)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+lvl & set the current log level  \\ \hline
+\end{tabular}
+
+\subsection{GET\_LOG\_LEVEL}
+
+get current log level as string
+
+\paragraph{Syntax:} \verb|lvl = get_log_level()|
+
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+lvl & get the current log level  \\ \hline
+\end{tabular}
+
+\subsection{DEBG}
+
+log a debug message
+
+\paragraph{Syntax:} \verb|debg(fmt, ..., [addprefix], [addnewline])|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+addprefix & optional boolean to indicate if the prefix should be prepended  \\ \hline
+addnewline & optional boolean to indicate if a new line should be appended  \\ \hline
+fmt & Message to log. Formatting available  \\ \hline
+\end{tabular}
+
+\subsection{ERR}
+
+log a error message
+
+\paragraph{Syntax:} \verb|err(fmt, ..., [addprefix], [addnewline])|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+addprefix & optional boolean to indicate if the prefix should be prepended  \\ \hline
+addnewline & optional boolean to indicate if a new line should be appended  \\ \hline
+fmt & Message to log. Formatting available  \\ \hline
+\end{tabular}
+
+\subsection{LOG\_FILE}
+
+gets or sets the log file
+
+\paragraph{Syntax:} \verb|fname = log_file([filename])|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+filename & optional filename to set  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+fname & current logfile  \\ \hline
+\end{tabular}
+
+\subsection{LOG\_LEVEL}
+
+gets or sets the log level
+
+\paragraph{Syntax:} \verb|ll = log_level([level])|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+level & optional log level to set  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+ll & current log level  \\ \hline
+\end{tabular}
+
+\subsection{WARN}
+
+log a warning message
+
+\paragraph{Syntax:} \verb|warn(fmt, ..., [addprefix], [addnewline])|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+addprefix & optional boolean to indicate if the prefix should be prepended  \\ \hline
+addnewline & optional boolean to indicate if a new line should be appended  \\ \hline
+fmt & Message to log. Formatting available  \\ \hline
+\end{tabular}
+
+\subsection{INFO}
+
+log a info message
+
+\paragraph{Syntax:} \verb|info(fmt, ..., [addprefix], [addnewline])|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+addprefix & optional boolean to indicate if the prefix should be prepended  \\ \hline
+addnewline & optional boolean to indicate if a new line should be appended  \\ \hline
+fmt & Message to log. Formatting available  \\ \hline
+\end{tabular}
+
+\subsection{LOG\_MSG}
+
+internal logging function
+
+\paragraph{Syntax:} \verb|log_msg(newfmt, fmt, ..., [addprefix], [addnewline])|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+newfmt & Prefix format  \\ \hline
+addnewline & optional boolean to indicate if a new line should be appended  \\ \hline
+fmt & Message to log. Formatting available  \\ \hline
+addprefix & optional boolean to indicate if the prefix should be prepended  \\ \hline
+\end{tabular}
+
+\subsection{SUCC}
+
+log a success message
+
+\paragraph{Syntax:} \verb|succ(fmt, ..., [addprefix], [addnewline])|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+addprefix & optional boolean to indicate if the prefix should be prepended  \\ \hline
+addnewline & optional boolean to indicate if a new line should be appended  \\ \hline
+fmt & Message to log. Formatting available  \\ \hline
+\end{tabular}
+
+\subsection{RECONSTRUCT\_MATRIX\_BY\_OVERWRITE}
+
+reconstructs a given sparse matrix into a full integral image
+
+\paragraph{Syntax:} \verb|outmatrix = reconstruct_matrix_by_overwrite(integral)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+integral & integral struct with fields scores, coords, I\_size  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+outmatrix & Expanded integral matrix  \\ \hline
+\end{tabular}
+
+\subsection{SPARSE\_CODEBOOK\_INTEGRAL}
+
+calculates a codebook entry from a kd-Tee based integral image
+
+\paragraph{Syntax:} \verb|codebook = sparse_codebook_integral(integral, queryX, queryY)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+x, y & x and y coordinates (2 elements per vector)  \\ \hline
+integral & integral struct with fields tree.x and tree.y. Scores mustnot be summed up beforehand.  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+codebook & Codebook vector  \\ \hline
+\end{tabular}
+
+\subsection{RECONSTRUCT\_MATRIX}
+
+reconstructs a given sparse matrix into a full integral image
+
+\paragraph{Syntax:} \verb|outmatrix = reconstruct_matrix(inmatrix)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+inmatrix & DxWxH Matrix with changed cells filled, everything else 0  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+outmatrix & The same matrix but expanded into a integral matrix.Input matrix is reused for speed  \\ \hline
+\end{tabular}
+
+\subsection{SPARSE\_CODEBOOK}
+
+calculates a codebook entry from a kd-Tee based integral image
+
+\paragraph{Syntax:} \verb|codebook = sparse_codebook(integral, queryX, queryY)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+queryX, queryY & requested coordinates  \\ \hline
+integral & integral struct with fields tree.x and tree.y. Scores mustnot be summed up beforehand.  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+codebook & Codebook vector  \\ \hline
+\end{tabular}
+
+\subsection{RECONSTRUCT\_MATRIX\_BY\_SUM}
+
+reconstructs a given sparse matrix into a full integral image
+
+\paragraph{Syntax:} \verb|outmatrix = reconstruct_matrix_by_sum(integral)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+integral & integral struct with fields scores, coords, I\_size. Scores mustnot be summed up beforehand.  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+outmatrix & Expanded integral matrix  \\ \hline
+\end{tabular}
+
+\subsection{GET\_CURRENT\_SCALES\_BY\_INDEX}
+
+get the current scales by an index
+
+\paragraph{Syntax:} \verb|current_scales = get_current_scales_by_index(si, unique_scales, scale_sizes)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+si & index  \\ \hline
+unique\_scales & available scales  \\ \hline
+scale\_sizes & amount of scales per split  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+current\_scales & unique list of scales  \\ \hline
+\end{tabular}
+
+\subsection{SORT\_CACHE\_FILES}
+
+sort a list of cache files by sizes extracted by the given format
+
+\paragraph{Syntax:} \verb|[files, sizes] = sort_cache_files(files, format)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+files & list of possible files  \\ \hline
+format & format string to extract the sizes  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+sizes & list of extracted sizes  \\ \hline
+files & list of resorted files  \\ \hline
+\end{tabular}
+
+\subsection{FILTER\_FEATURE\_BY\_SCALE}
+
+filters given features by a list of of given scales
+
+\paragraph{Syntax:} \verb|filtered = filter_feature_by_scale(current_scales, feature)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+feature & feature struct  \\ \hline
+current\_scales & Vector of possible scales  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+filtered & logic vector  \\ \hline
+\end{tabular}
+
+\subsection{GET\_AVAILABLE\_SCALES}
+
+get the available scales by this feature struct
+
+\paragraph{Syntax:} \verb|[unique_scales, scale_sizes] = get_available_scales(params, feature)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+feature & feature struct  \\ \hline
+params & Configuration struct  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+scale\_sizes & amount of scales per split  \\ \hline
+unique\_scales & unique list of scales  \\ \hline
+\end{tabular}
+
+\subsection{FILTER\_CACHE\_FILES}
+
+filters a list of cache files based on the best matching query size
+
+\paragraph{Syntax:} \verb|filename = filter_cache_files(params, files, sizes, requested_size)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+sizes & corresponding sizes  \\ \hline
+files & list of possible files  \\ \hline
+params & Configuration struct  \\ \hline
+requested\_size & size of query part  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+filename & path of best matching file  \\ \hline
+\end{tabular}
+
+\subsection{GET\_CURRENT\_SCALES\_BY\_SIZE}
+
+get the current scales by a query size
+
+\paragraph{Syntax:} \verb|current_scales = get_current_scales_by_size(params, unique_scales, scale_sizes, roi_size)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+scale\_sizes & amount of scales per split  \\ \hline
+roi\_sizes & query size  \\ \hline
+params & Configuration struct  \\ \hline
+unique\_scales & available scales  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+current\_scales & unique list of scales  \\ \hline
+\end{tabular}
+
+\subsection{GET\_POSSIBLE\_CACHE\_FILES}
+
+get all possible cache files based on a format string
+
+\paragraph{Syntax:} \verb|files = get_possible_cache_files(cachename)|
+
+Inputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+cachename & format string to search for. Replaces %d by *  \\ \hline
+\end{tabular}
+Outputs:
+
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Description} \\
+\hline \hline \\
+files & list of possible files  \\ \hline
+\end{tabular}

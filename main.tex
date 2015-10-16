@@ -80,7 +80,11 @@
 
 \phantomsection
 \addcontentsline{toc}{chapter}{\listalgorithmcfname}
+\begingroup
+\let\oldnumberline\numberline
+\renewcommand{\numberline}{\algorithmcfname~\oldnumberline}
 \listofalgorithms
+\endgroup
 \cleardoubleemptypage
 
 

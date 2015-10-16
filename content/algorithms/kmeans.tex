@@ -1,39 +1,39 @@
 \section{k-Means}
 \label{sec:kmeans}
 
-The k-means algorithm is used to partition a given set of observations into a predefined amount of $k$ clusters. The algorithm as described by \cite{macqueen1967} starts with a random set of $k$ center-points ($\mu$). During each update step, all observations $x$ are assigned to their nearest center-point (see equation \ref{eqn:kmeans_assign_step}). In the standard algorithm, only one assignment to one center is possible. If multiple centers have the same distance to the observation, a random one could be chosen.
-
-\begin{equation}
-S_i^{(t)} = \big \{ x_p : \big \| x_p - \mu^{(t)}_i \big \|^2 \le \big \| x_p - \mu^{(t)}_j \big \|^2 \ \forall j, 1 \le j \le k \big\}
-\label{eqn:kmeans_assign_step}
-\end{equation}
-
-Afterwards, the center-points are repositioned by calculating the mean of the assigned observations to the respective center-points (see \eqnref{kmeans_update_step}).
-
-\begin{equation}
-\mu^{(t+1)}_i = \frac{1}{|S^{(t)}_i|} \sum_{x_j \in S^{(t)}_i} x_j
-\label{eqn:kmeans_update_step}
-\end{equation}
-
-The update process reoccurs until all observations remain at the assigned center-points and therefore the center-points would not be updated anymore.
-
-% sample images
-
-This means that the k-means algorithm tries to optimize the objective function \ref{eqn:kmeans_objective_function}. As there are only a finite number of possible assignments for the amount of centroids and observations available and each iteration has to result in better solution, the algorithm always ends in a local minimum.
-
-\begin{equation}
-J = \sum_{n=1}^{N} \sum_{k=1}^{K} r_{nk} ||x_n - \mu_k||^2
-\label{eqn:kmeans_objective_function}
-\end{equation}
-
-\[
-\text{with } \\
-r_{nk} = \begin{cases}
-%1 & \text{if } k = \arg \min_j ||x_n - \mu_j||^2 \\
-1 & x_n \in S_k \\
-0 & \text{otherwise}
-\end{cases}
-\]
-
-% minimize graph image
+%The k-means algorithm is used to partition a given set of observations into a predefined amount of $k$ clusters. The algorithm as described by \cite{macqueen1967} starts with a random set of $k$ center-points ($\mu$). During each update step, all observations $x$ are assigned to their nearest center-point (see equation \ref{eqn:kmeans_assign_step}). In the standard algorithm, only one assignment to one center is possible. If multiple centers have the same distance to the observation, a random one could be chosen.
+%
+%\begin{equation}
+%S_i^{(t)} = \big \{ x_p : \big \| x_p - \mu^{(t)}_i \big \|^2 \le \big \| x_p - \mu^{(t)}_j \big \|^2 \ \forall j, 1 \le j \le k \big\}
+%\label{eqn:kmeans_assign_step}
+%\end{equation}
+%
+%Afterwards, the center-points are repositioned by calculating the mean of the assigned observations to the respective center-points (see \eqnref{kmeans_update_step}).
+%
+%\begin{equation}
+%\mu^{(t+1)}_i = \frac{1}{|S^{(t)}_i|} \sum_{x_j \in S^{(t)}_i} x_j
+%\label{eqn:kmeans_update_step}
+%\end{equation}
+%
+%The update process reoccurs until all observations remain at the assigned center-points and therefore the center-points would not be updated anymore.
+%
+%% sample images
+%
+%This means that the k-means algorithm tries to optimize the objective function \ref{eqn:kmeans_objective_function}. As there are only a finite number of possible assignments for the amount of centroids and observations available and each iteration has to result in better solution, the algorithm always ends in a local minimum.
+%
+%\begin{equation}
+%J = \sum_{n=1}^{N} \sum_{k=1}^{K} r_{nk} ||x_n - \mu_k||^2
+%\label{eqn:kmeans_objective_function}
+%\end{equation}
+%
+%\[
+%\text{with } \\
+%r_{nk} = \begin{cases}
+%%1 & \text{if } k = \arg \min_j ||x_n - \mu_j||^2 \\
+%1 & x_n \in S_k \\
+%0 & \text{otherwise}
+%\end{cases}
+%\]
+%
+%% minimize graph image
 

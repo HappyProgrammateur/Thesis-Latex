@@ -20,7 +20,7 @@
 
 % Dokumentdaten
 \newcommand{\docTitle}{Efficient Large Scale Part Retrieval}
-\newcommand{\docUntertitle}{} % Kein Untertitel
+\newcommand{\docUntertitle}{An Analysis Of Possible Approaches To Boost Existing Solutions} % Kein Untertitel
 % Arten der Arbeit: Bachelorthesis, Masterthesis, Seminararbeit, Diplomarbeit
 \newcommand{\docArtDerArbeit}{Masterthesis}
 %Studiengaenge: Allgemeine Informatik Bachelor, Computer Networking Bachelor,
@@ -97,6 +97,8 @@ Computer Vision group}
 
 % oversized tables
 \usepackage{longtable}
+
+\usepackage[section]{placeins}
 
 % ##################################################
 % Seitenformatierung
@@ -218,7 +220,7 @@ Computer Vision group}
 
 % Breite des Nummerierungsbereiches [Abbildung 1:]
 \newlength{\figureLength}
-\settowidth{\figureLength}{\bfseries\cftfigpresnum\cftfigaftersnum}
+\settowidth{\figureLength}{\bfseries\cftfigpresnum\thefigure\cftfigaftersnum}
 \setlength{\cftfignumwidth}{\figureLength}
 \setlength{\cftfigindent}{0cm}
 
@@ -241,7 +243,7 @@ Computer Vision group}
 
 % Breite des Nummerierungsbereiches [Abbildung 1:]
 \newlength{\tableLength}
-\settowidth{\tableLength}{\bfseries\cfttabpresnum\cfttabaftersnum}
+\settowidth{\tableLength}{\bfseries\cfttabpresnum\thetable\cfttabaftersnum}
 \setlength{\cfttabnumwidth}{\tableLength}
 \setlength{\cfttabindent}{0cm}
 
