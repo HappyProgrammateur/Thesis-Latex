@@ -1,1 +1,11 @@
 \chapter{Basics}
+
+This chapter covers the terminology and algorithms used during this thesis. 
+
+\section{Terminology}
+
+During this thesis, a common terminology regarding image part retrieval is shared. The noun image $I$ typically defines a whole picture without any further modifications or transformations like cutting, rotating, scaling, normalization or gradient/feature computations. An image part in the other hand denotes a small part of an image defined by a rectangle bounding box. Such a bounding box is defined by its coordinate $(x_{tl},y_{tl})$ of the top left corner and the coordinate of the bottom right corner $(x_{br},y_{br})$ or its width and height. A part can consist of several, smaller bounding boxes. Each of those smaller boxes were called patches and are represented by a feature vector. A feature vector is a comparable way to represent the information in a patch by different factors as for example color distribution, gradients and contours. Typically each dimension of such a vectors stands for a defined type of information within the patch. The co-occurrence of multiple patches in an image part is most of the time used to describe the object contained.
+
+If one wants to know if an image contains a specific object, it is typically required to define which patches extracted from the image belong together and therefor could describe the object. The most common approach is the sliding window approach. In this approach, a window is represented by a (sometimes fuzzy) bounding box which groups the patches together. As it is nearly impossible to test all combinations of patches, the sliding window approach tries to approximate the groupings by defining different window sizes and dimensions and slides them over the image to generate multiple hypothetical groups.
+
+Therefor in this thesis, an image part is equivalent of a bounding box inside of picture without any further processing. A patch defines an image part which was used to extract a feature vector from and a bounding box enclosing patches is defined as window.
