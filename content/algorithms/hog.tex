@@ -1,14 +1,21 @@
 \subsection{\acf{HOG}}
 \label{sec:hog}
 
-\ac{HOG} were first introduced by Dalal and Triggs in 2005 \cite{Dalal2005}. The idea behind \ac{HOG} is that the objects and shapes could be described by the distribution of gradients and edge directions. \ac{HOG} were initial used for pedestrian detection in static images, as Dalal and Triggs observed that the movement of individual body parts could be ignored if a general upright position is in place. Later experiments showed that it also provided good performances in other categories \cite{Malisiewicz2011}.
-% Extracting \ac{HOG} from images consist of computing the gradients of pixel cells and grouping them into blocks (the actual descriptors).
+\ac{HOG} were first introduced by Dalal and Triggs in 2005 \cite{Dalal2005}. The idea behind \ac{HOG} is that the objects and shapes could be described by the distribution of gradients and edge directions.
 
-The first step for extracting \ac{HOG} from images is therefore the computation of gradients. It was evaluated that simple 1-D $[-1, 0, 1]$ masks with a $\sigma = 0$ smoothing scale produces the best results. Color channels are computed separately and the one with the largest norm is used as the pixel's gradient vector. The authors also evaluated the usage of gamma/color normalization, but got only modest effects on performance. Gray scaling the images even reduces the performance.
+The first step for extracting \ac{HOG} from images is the computation of gradients. It was evaluated that simple 1-D ($[-1, 0, 1]$) masks with a $\sigma = 0$ smoothing scale produces the best results. Color channels are computed separately and the one with the largest norm is used as the pixel's gradient vector. The authors also evaluated the usage of gamma/color normalization, but got only modest effects on performance. Gray scaling the images even reduces the performance.
 
-The second step handles the binning by creating the cell histograms. In this step, each pixel within a $8 \times 8$ cell does a weighted vote for a histogram channel based on his gradient orientation. The weight of the vote is calculated by the magnitude of the gradient.
+The second step handles the binning by creating the cell histograms. In this step, each pixel within a $\eta \times \eta$ cell (typically 6-8 pixels as this produced the best results, regardless of the grid sizes) does a weighted vote for a histogram channel $\beta$ based on his gradient orientation. The weight of the vote is calculated by the magnitude of the gradient.
 
-As the gradient strengths vary over a wide range, based on illumination variations and foreground-background contrast, a local contrast normalization is required as a third step. This is done by grouping the histogram cells into larger blocks. The authors evaluated two grouping approaches, rectangular HOG (\acs{R-HOG}) and circular HOG (\acs{C-HOG}). \acs{R-HOG} are typical organized as $3\times3$ or $5\times5$ cell blocks. \acs{C-HOG} are grouped by a log-polar grid. According to the authors, at least two radial bins and four angular bins (makes a total of five to eight bins, depending if the center is also divided) are needed for good performance.
+\begin{wrapfigure}[8]{r}{0.1\textwidth}
+    \includegraphics[width=\textwidth]{images/r-hog}
+    \caption{}
+    \label{fig:r-hog}
+\end{wrapfigure}
+
+As the gradient strengths vary over a wide range, based on illumination variations and foreground-background contrast, a local contrast normalization is required as a third step. This is done by grouping the histogram cells into larger blocks. The authors evaluated two grouping approaches, rectangular HOG (\acs{R-HOG}) and circular HOG (\acs{C-HOG}). \acs{R-HOG} are typical organized as $\varsigma \times \varsigma$ cell blocks (most of the time 3 or 5 blocks per direction). \acs{C-HOG} are grouped by a log-polar grid. According to the authors, at least two radial bins and four angular bins (makes a total of five to eight bins, depending if the center is also divided) as shown in figure \ref{fig:r-hog} are needed for good performance.
+
+
 
 The authors also evaluated multiple normalization approaches to increase the detection performance.
 The following approaches produced the same performance:
@@ -42,3 +49,5 @@ Whilst a simple L1-norm reduced the performance by 5\% and omitting the normaliz
     \caption{Visualization of \ac{HOG} features}
     \label{fig:lena_hog}
 \end{figure}
+
+\ac{HOG} were initially used for pedestrian detection in static images, as Dalal and Triggs observed that the movement of individual body parts could be ignored if a general upright position is in place. Later experiments showed that it also provided good performances in other categories \cite{Malisiewicz2011}.
