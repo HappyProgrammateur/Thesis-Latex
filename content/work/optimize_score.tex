@@ -29,3 +29,5 @@ The second technique is based on \eqnref{nonmax_min}. This variant removes much 
 \end{equation}
 
 The current algorithm produced the best results with the second technique, as it reduces the repetition of many positive windows showing only a single bicycle wheel. As they would not cover 50\% of the window enclosing the whole bicycle, they appear as new matches in the result list by using the first technique. Depending on the query image, it could be useful to switch between the suppression techniques as it could be desired to get smaller matches enclosed by a bigger one (for example children in front of their parents).
+
+The downside of the second approach is that most of the time bigger windows are selected over the smaller ones. This produces good results if the image database contains a large representation of the query part, but not as accurate results otherwise.

@@ -59,55 +59,9 @@ Most of the input and output values in the framework are structures or structure
 The \verb|demo| function represents a complete sample implementation using all modules from the framework. The function recognizes if it was run from a desktop or commandline (launched with the \textit{-nodesktop} option) instance of \MATLAB. If a desktop instance is used, the user will be asked interactively for a query image and afterwards to select a part from it to search for. If invoked from within a commandline instance the filename and bounding box is taken from the configuration structure.
 
 The first step in the \verb|demo| function after a bounding box was selected is the creation of the query codebook. This is abstracted by the \verb|extract_query_codebook| function, which calculates the codebook from the image file or extracts it from the integral image for the query image. In the second step a \ac{SVM} is trained through the \verb|get_svms| function. If the calibration is enabled, the third step includes the calculation of sliding windows and corresponding codebooks for the query image and scoring them with the previously trained \ac{SVM}. A gaussian curve is afterwards fitted onto the scores and later used to adjust the scores obtained from the image database. The next step includes the loading of the corresponding database based on the size of the query part. When the database is loaded the currently computational most expensive part comes into play which calculates the sliding windows and extracts the codebooks from the integral images. For a speed up the work will be distributed over several pool workers. It had to be ensured that the data which has to be transfered between the workers and the main program is as small as possible. Tests showed that the parallization could even increase the computation time if the data required by the different workers becomes to large. Therefore it brings only a significant speed up if kd-Trees were used or the matrix reconstruction is done on the workers instead in the main program. The obtained codebooks are afterwards classified by the \ac{SVM}. If a calibration was used, all windows with scores above $-0.25$ are extracted from their source image and saved in the result folders. Without calibration, the first 100 windows after a non maximum suppression (sorted by decreasing scores) are saved. In addition a \textit{results.mat} file is also placed inside the folder. These files could be collected by the \verb|measure_results| function which calculates precision-recall curves and provide overviews about how the different parameter combinations behaved according to the ground truth from the \ac{VOC2011} dataset.
-%TODO beschreibung des frameworks
+%TODO beschreibung der benutzung, image listen etc
 
-%\begin{table}
-\begin{longtable}{%
-|%
-p{0.2\textwidth}%
-|%
->{\raggedright\arraybackslash}%
-p{0.135\textwidth}%
-|%
->{\raggedright\arraybackslash}%
-p{0.135\textwidth}%
-|%
->{\raggedright\arraybackslash}%
-p{0.4\textwidth}%
-|%
-}
-\hline \textbf{Parameter} & \textbf{Possible values} & \textbf{Default} & \textbf{Description} \\ 
-\hline
-\hline class & A PASCAL class & bicycle & Specifies the class to restrict the bounding boxes to \\ 
-\hline parts & $x \in \mathbb{N} \textbackslash 0$ & 4 & Number of parts per window \\ 
-\hline clusters & $x \in \mathbb{N} \textbackslash 0$ & 1000 & Number of k-Means clusters to use \\ 
-\hline integrals\allowbreak\_scale\allowbreak\_factor & $x \in \mathbb{R}, 0 < x \le 1$ & 1 & Specifies the percentage to which a integral image should be downsampled to \\ 
-\hline stream\allowbreak\_max & $x \in \mathbb{N} \textbackslash 0$ & 100 & Maximum amount of images used from a PASCAL stream \\ 
-\hline stream\allowbreak\_name & Any string & query & Name of the PASCAL stream to read images from \\ 
-\hline codebook\allowbreak\_type & double, single & double & Internal datatype of the codebooks \\ 
-\hline codebook\allowbreak\_scales\allowbreak\_count & $x \in \mathbb{N} \textbackslash 0$ & 3 & Amount of scale ranges in which integral images will be split into \\ 
-\hline nonmax\allowbreak\_type\allowbreak\_min & true, false & true & Specifies if $\frac{\text{area}(A \cap B)}{\min(\text{area}(A), \text{area}(B))}$ or $\frac{\text{area}(A \cap B)}{\text{area}(A \cup B)}$ should be used for a non-maximum suppression \\ 
-\hline use\allowbreak\_calibration & true, false & true & If true, a score calibration based on the query image is performed \\ 
-\hline features\allowbreak\_per\allowbreak\_roi & $x \in \mathbb{R}, 0 < x$ & 2 & Amount of feature patches which have to exist per window axis \\ 
-\hline query\allowbreak\_from\allowbreak\_integral & true, false & false & If true, the query codebooks will be retrieved from the image database instead of extracted from the query image \\ 
-\hline default\allowbreak\_query\allowbreak\_file & An image id & 2008\allowbreak\_004363 & Used to automate the experiments instead of asking interactively for a query image \\ 
-\hline default\allowbreak\_bounding\allowbreak\_box & [x, y, width, height] & Extracted from the PASCAL dataset & The bounding box of the query image part \\ 
-\hline use\allowbreak\_libsvm\allowbreak\_classification & true, false & true & If true, the \verb|svmpredict| function is used to classify the database codebooks. Otherwise a custom implementation is used \\ 
-\hline expand\allowbreak\_bboxes & true, false & true & Expands the bounding boxes by $\frac{1}{2}$ of the average feature patch size \\ 
-\hline naiive\allowbreak\_integral\allowbreak\_backend & true, false & true & Specifies to use full integral images without any memory optimization techniques \\ 
-\hline window\allowbreak\_margin & $x \in \mathbb{N} \textbackslash 0$ & 10 & Amount of pixels each window is shifted during the sliding window generation  \\ 
-\hline max\allowbreak\_window\allowbreak\_scales & $x \in \mathbb{N} \textbackslash 0$ & 10 & Maximum amount of times a scaling is performed during the sliding window generation \\ 
-\hline min\allowbreak\_window\allowbreak\_size & $x \in \mathbb{R}, 0 < x \le 1$ & 0.5 & Required percentage of a window area which has to be placed over an image (windows are getting clipped at the image boundaries)\\ 
-\hline use\allowbreak\_kdtree & true, false & false & Enables the kd-Tree storage backend \\ 
-\hline integral\allowbreak\_backend\allowbreak\_overwrite & true, false & false & Enables the integral matrix reconstruction via overwriting the bottom right values \\ 
-\hline integral\allowbreak\_backend\allowbreak\_sum & true, false & false & Enables the integral matrix reconstruction via summing up the bottom right values \\ 
-\hline integral\allowbreak\_backend\allowbreak\_matlab\allowbreak\_sparse & true, false & false & Enables the \MATLAB sparse storage backend \\ 
-\hline precalced\allowbreak\_windows & true, false & false & Disables integral images and precalculates codebooks in a sliding window manner \\ 
-\hline 
-\caption{Configuration parameters for the part retrieval framework}
-\label{tab:configuration_framework}
-\end{longtable}
-%\end{table}
+
 
 
 \subsection{A modular approach}
