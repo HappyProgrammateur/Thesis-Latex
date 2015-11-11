@@ -1,0 +1,59 @@
+\begin{verbatim}
+feature
+    .all_scales         -> Scale factors used in the feature
+                           pyramid
+    .curid              -> ID of the image
+    .objectid           -> Index of the object
+    .feature_type       -> Extracted with a mask or not
+    .I_size             -> Size of the input image
+    .X                  -> The features itself
+    .M                  -> The gradient
+    .scales             -> The map between feature and scale
+    .bbs                -> Patch bounding boxes
+    .window2feature     -> List of sliding windows
+    .area               -> Area of which the features were 
+                           extracted
+    .distVec            -> LDA distance vector
+    .deletedFeatures    -> Removed features during filtering
+
+integral
+    .I                  -> The integral image itself
+    .I_size             -> The size of the full integral image
+    .curid              -> The ID of the source image
+    .scale_factor       -> The factor of which the integral image
+                           was shrinked
+    .max_size           -> The maximum size of the patches used
+                           inside the integral
+    .min_size           -> The minimum size of the patches used
+                           inside the integral
+    .tree               -> kd-Tree representation
+    .scores             -> The codebook entries
+    .idx                -> The indices of the codebook entries
+    .coords             -> The coordinates of the codebook
+                           entries
+    .small_tree         -> kd-Tree without the codebook entries
+
+codebook
+    .I                  -> The codebook itself
+    .curid              -> The image were the codebook comes from
+    .size               -> The size of the window
+
+cluster
+    .centroids                 -> The centroids of the k-means
+    .codebookSize              -> The number of clusters/codebook
+                                  dimensions
+    .feature2codebook          -> function to get a codebook from
+                                  a feature
+    .feature2codebookintegral  -> function to get an integral image
+                                  from a list of features
+
+svm_model
+    .model              -> The underlying implementation
+        .SVs            -> Support vectors from libsvm
+        .sv_coef        -> Coefficents from libsvm
+        .rho            -> Rho from libsvm
+    .curid              -> ID of the trained image
+    .codebook           -> Used positive codebook
+    .cb_size            -> Size of the codebook
+    .classify           -> function to score a list of codebooks
+\end{verbatim}

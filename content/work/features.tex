@@ -69,14 +69,23 @@ The codebooks are afterwards created by selecting each labeled bounding box of e
 For the initial tests, a simple \acf{NN} search with euclidean distances was used to compute the similarity between different codebooks.
 
 For a visual verification, the 15 nearest parts were shown aside to the query image. Additionally the euclidean distance $||c_1-c_2||_2$ between two different codebooks $c_1$ and $c_2$ was printed along each image. One example can be seen in \figref{nn_query_search}. The image in the upper left shows the query image whilst the remaining images were ordered by their distance to the query image and printed from the left to the right, up to the bottom.
-%TODO beispiel bild \label{fig:nn_query_search}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{images/codebook_similiar}
+\caption{Comparison of similar images by using codebooks}
+\label{fig:nn_query_search}
+\end{figure}
 
 
 After the verification that this approach has the potential to find similar images, further codebook tests were done to get a better feeling of the feature assignments. As the resulting fisher vectors have the size $|x| * k$ (for example with 64 components: $775 * 64 = 49600$) which becomes unusable in terms of memory usage for integral images, they were not further used in favor of the k-means approach.
 
 % searching for representative clusters (nn-iter)
-To verify the contribution of the codebook dimensions based on the query, the most shared codebook dimensions within the best 15 remaining images and their respective patches were marked inside the images. It can be clearly seen in \figref{nn_query_search} that the patches with a comparable visual representation share the same cluster and (from a human perspective) seem to be representative for the chosen object class.
-%TODO Bild mit markierung, oder auf vorheriges verweisen
+To verify the contribution of the codebook dimensions based on the query, the most shared codebook dimensions within the best 15 remaining images and their respective patches were marked inside the images. It can be clearly seen in \figref{nn_query_search2:common} that the patches with a comparable visual representation share the same cluster and (from a human perspective) seem to be representative for the chosen object class.
+
+
+
+
 To prove this assumption, an iterative \ac{NN} was implemented. It consists of several rounds, each executing a \ac{NN} search over the available patches and sorting the results. After each round, the most common codebook dimensions of the first $k$ patches were taken whilst the remaining ones were removed (set to zero) as described by \prettyref{alg:iterative_nn}.
 
 \begin{algorithm}
@@ -99,8 +108,25 @@ To prove this assumption, an iterative \ac{NN} was implemented. It consists of s
 	\label{alg:iterative_nn}
 \end{algorithm}
 
-By using this algorithm, it could be shown that the most representative patches were assigned to the same clusters, as more similar objects are pulled together at each iteration. In nearly all experiments one or two clusters remained which contain patches along the bicycle wheels.
-%TODO bilder fuer verschiedene iterationen 
+By using this algorithm, it could be shown that the most representative patches were assigned to the same clusters, as more similar objects are pulled together at each iteration (\figref{nn_query_search2:best}). In nearly all experiments one or two clusters remained which contain patches along the bicycle wheels.
+
+
+
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+\includegraphics[width=\linewidth]{images/codebook_similiar2}
+\caption{Showing common codebook dimensions}
+\label{fig:nn_query_search2:common}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+\includegraphics[width=\linewidth]{images/codebook_similiar_best2}
+\caption{Showing and using only the most common codebook dimension}
+\label{fig:nn_query_search2:best}
+\end{subfigure}
+\caption{Query part with first detection}
+\label{fig:nn_query_search2}
+\end{figure}
 
 \par
 % maintaining location information (parts)

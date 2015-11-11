@@ -15,3 +15,7 @@
   \gdef,{\breakingcomma\discretionary{}{}{}}
 }
 \newcommand{\mathlist}[1]{$\{\mathcode`\,=\string"8000 #1\}$}
+
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother

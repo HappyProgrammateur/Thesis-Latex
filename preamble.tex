@@ -285,6 +285,26 @@ Computer Vision group}
 %    style=friendly
 %}
 %\newminted{matlab}{}
+
+
+\usepackage{fancyvrb}
+
+% redefine \VerbatimInput
+\RecustomVerbatimCommand{\VerbatimInput}{VerbatimInput}%
+{fontsize={\scriptsize },
+ %
+% frame=lines,  % top and bottom rule only
+ framesep=1em, % separation between frame and text
+ rulecolor=\color{Gray},
+ %
+ label=\fbox{\color{Black}data.txt},
+ labelposition=topline,
+ %
+ commandchars=\|\(\), % escape character and argument delimiters for
+                      % commands within the verbatim
+ commentchar=*        % comment character
+}
+
 % ##################################################
 % Theoreme
 % ##################################################

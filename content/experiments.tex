@@ -1,5 +1,38 @@
-\chapter{Experiments}
+\chapter{Experiments and Results}
 \label{cha:experiments}
+
+As multiple approaches were developed during the thesis, several experiments were required. These experiments can be categorized into 
+
+\begin{itemize}
+\item memory usage
+\item file size
+\item time required to
+    \begin{itemize}
+    \item load the database
+    \item extract codebooks from the database
+    \item do a complete query run
+    \end{itemize}
+\item detection performance
+\end{itemize}
+
+To test the loading times, the different storage mechanisms were each tested with 512 and 1000 codebook dimensions. Together with the different mechanism, this results in total to 14 unique combinations. Each combination loads the same database containing 50 images with an average size of 476x391 pixels\footnote{The list of PASCAL ids can be found in the appendix \ref{apx:images50}}. It should be noted that all mechanisms result in the same integral images at runtime or at least provide the same results on extraction.
+
+As one can see in \figref{loading_all} the na\"{\i}ve approach (which stores the complete matrices) obviously requires an unusable amount of time to load the database. One reason that the loading time does not have a linear dependency on the codebook size, is that \MATLAB uses a compression for files with version 7 and above and the possibility for empty codebook entries or similar entries increases for higher dimensional vectors. The approach which stores only a sparse representation with zero values removed, was much faster, but still requires to much time to load compared to the whole computing time of the ExemplarSVM algorithm (%TODO: Zeit).
+
+\Figref{file_sizes} shows the file sizes of the different techniques. As one may notice, the \MATLAB sparse representation of the database requires much more space on the filesystem compared to the na\"{\i}ve approach, but loads faster. This is because the internal representation of the sparse matrices was not as small compressed as the full matrices, possibly mainly because the amount of consecutive data is much reduced. Obviously, the compressed matrices have to be uncompressed during load, which requires more time than loading the bigger file of sparse matrices. As the compression is mandatory for \MATLAB files with version 7 and up\footnote{\label{footnote:matlab_files}As described on \url{https://de.mathworks.com/help/matlab/ref/save.html?refresh=true} (visited 11/06/2015)} and version 7.3 is required due to the large variable sizes\footnoteref{footnote:matlab_files}, this behavior can not be circumvented.
+
+The memory usage of the different techniques in \ac{RAM} is shown in \figref{memory_usage}. It has to be noted that some of the techniques (namely the summation and overwrite) require the reconstruction of the original integral images. This increases the memory usage during runtime, but (in contrast to the na\"{\i}ve technique) only for one image at a time (when it is queried). The required size depends on the information which is needed to reconstruct every possible extraction point. As the summation techniques calculates the integral image at runtime, it requires the least stored information. The implementation of the sparse storage mechanism allows only to omit cells with a zero value and therefore has to store all cells which are in the bottom left of the first filled cell for a codebook dimension. The kd-Tree variants, compared to the checkpoints variant, require some additional meta information to build up the tree.
+
+To complete the comparison between the different mechanisms, the time required to extract a complete set of windows from an image was measured. The computation of the window list was based on \textit{2008\_004363.jpg} with the bounding box $x_{min} = 102, y_{min} = 178, x_{max} = 344, y_{max} = 336$. This results into 4784 windows. %TODO: Extract time
+
+As the ExemplarSVM does not load precomputed data, except of the negative features for the \ac{SVM} training, it was not possible to compare it with the different parts of the tested approaches. Instead the total processing time is used.
+With the initial implementation, which uses a sliding window algorithm with a fixed 10 pixel shift, the amount of searched windows (between 4000 and 7500, depending on the query image) is much higher compared to the searched windows in the ExemplarSVM algorithm (limited to 400). This obviously results in a high processing time for all configurations as one can see in \figref{orig_window_time}.
+
+Further experiments used an implementation which shifts the windows based on their size. This reduces the amount of windows and therefore increases the processing speed as shown in \figref{processing_time_windows}.
+As it obviously also reduces the number of hypotheses, the possibility to find a perfect match decreases. To see the relationship between the amount of windows and the detection performance, multiple runs with different configurations and window slide settings were done.
+
+The tests with the files from appendix \ref{apx:images50} provided a performance which comes near to the ExemplarSVM. Additionally, some of the query images performed much better compared to the ExemplarSVM algorithm. Together with the fact that the performance of the different approaches were in similar ranges, the assumption arises that there is some bias in the test set. This bias results in a behavior which always prefers windows which encloses a large portion of an image. Combined with the fact that (the randomly chosen) test images contain many images with bicycles nearly of the image size, this results in similar performance rates for different bicycle queries. To add more variance to the test set, another randomly chosen images were added to get 234 images in total (97 bicycle and 137 non-bicycle images).
+%TODO: 100 images
 
 - Verschiedene Parameter
 - Performance
