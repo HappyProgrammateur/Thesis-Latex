@@ -1,3 +1,55 @@
 \subsection{\acf{GMM}}
 \label{sec:gmm}
 
+\acl{GMM} is a probabilistic model coming from the mathematical field of statistics \cite{mclachlan1988mixture}. It is based on multi-variant normal distributions which have n-dimensional random variables as described in \eqnref{mulgauss} (in contrast to the gauss distribution from \eqnref{singlegauss} postulated by Carl Friedrich Gauss).
+
+\begin{eqnarray}
+\label{eqn:mulgauss}
+f(X) &=& \frac{
+1
+}{
+(2\pi)^{\frac{n}{2} |\Sigma|^{\frac{1}{2}}}
+} e ^ { - \frac{1}{2} (X - \mu)^T \Sigma^{-1} (X - \mu) }
+\\
+\label{eqn:singlegauss}
+f(X) &=& \frac{1}{\sigma\sqrt{2\pi}}e^{\frac{1}{2} (\frac{X - \mu}{\sigma})^2}
+\end{eqnarray}
+
+Both equations are using the random variable $X$, the expectation $\mu$, the variance $\sigma^2$ and the variance matrix $\Sigma$ respectively. A \acl{GMM} use constructed from weighted sums of $N$ gaussian densities.
+
+\begin{equation}
+p(x|\lambda) = \sum_{i=1}^{N} w_i g(x| \mu_i, \Sigma_i)
+\end{equation}
+
+with
+\begin{align*}
+x & = (x_{1},\dotsc,x_{n}) && \text{D-dimensional data vector}\\
+w & = (w_1,\dots,w_{N}) && \text{Mixture weights}\\
+g(x| \mu_i, \Sigma_i) & ; i,\dots,N && \text{Gaussian components}
+\end{align*}
+
+The mixture weights have to satisfy the constraint $\sum_{i=1}^N w_i = 1$. Each of the components is a multi-variant gaussian function as described in \eqnref{gauss_func}.
+
+\begin{equation}
+\label{eqn:gauss_func}
+g(x|\mu_i, \Sigma_i) = \frac{1}{(2\pi)^{D/2} | \Sigma_i |^{1/2}} exp \left\{ - \frac{1}{2} (x - \mu_i)' \Sigma_i^{-1} (x - \mu_i) \right\}
+\end{equation}
+
+A complete \ac{GMM} can be described by its parameters $\lambda = \{w, \mu, \Sigma\}$. Typically a \ac{GMM} is trained by the \acf{EM} algorithm \cite{dempster1977maximum}. This algorithm is used to iteratively apply the \ac{ML} estimation of the model parameters. The \ac{ML} tries to find the parameters which maximizes the likelihood of a \ac{GMM} for a given training data with $N$ datapoints. The \ac{GMM} likelihood is typically described as (assuming a independence between the training vectors $X = \{x_i,\dots,x_N\}$):
+
+\begin{equation}
+\label{eqn:likelihood}
+p(X|\lambda) = \prod_{j=1}^{N} p(x_j|\lambda)
+\end{equation}
+
+As a direct maximization is not possible because of the non-linearity of the \eqnref{likelihood}, the \ac{EM} tries to iteratively estimate new model parameters $\bar{\lambda}$ based on a given model $\lambda$ such that $p(X|\bar{\lambda}) \ge p(X|\lambda)$. One iteration step itself is typically split into the E- and M-step. In terms of \ac{GMM}, during the E-step the probabilities of the generation of a datum $x_i$ by the component $i$ are computed. These probabilities are used to calculate the amount of datapoints assigned to a component by $n_i = \sum_{j=1}^N p_{ji}$. In the M-step the new parameters are calculated by
+
+\begin{eqnarray}
+\mu_i = &\sum_{j=1}^N \frac{p_{ij} x}{n_i} \\
+\Sigma_i = & \sum_{j=1}^N \frac{p_{ij} (x_j - \mu_i) (x_j - \mu_i)^T}{n_i}\\
+w_i  = & \frac{n_i}{N}
+\end{eqnarray}
+
+These steps are repeated until a convergence threshold is reached.
+
+\acp{GMM} are mostly used in voice recognition and speaker recognition \cite{Reynolds1995}, but found also their use cases in the computer vision as for example with fisher kernels \cite{Perronnin2006}.
