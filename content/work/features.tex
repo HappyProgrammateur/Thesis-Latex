@@ -43,7 +43,7 @@ with $a=-0.5$ in the \MATLAB implementation\footnote{Implemented in the \textit{
 
 The codebooks are afterwards created by selecting each labeled bounding box of each test image, computing the features $X$ (\ac{HOG} and whitened \ac{HOG}), assign them to the clusters by the corresponding centroids $C$ (either \ac{NN} in terms of k-means or by computing the fisher vector) and comparing it to the codebooks of the remaining image bounding boxes. In cas of k-means, the codebook values $c$ itself depend on the distances $D$ of the features to their corresponding centroids $C$ as described in the equations \ref{eqn:codebook_calc1}, \ref{eqn:codebook_calc2} and \ref{eqn:codebook_calc3}.
 
-%TODO algorithm or formular???
+%_TODO algorithm or formular???
 %\begin{algorithm}
 %	\KwIn{$X$: Features extracted from a bounding box, $C$: Cluster centroids}
 %	\KwOut{$c$: codebook representing the given features}
@@ -104,7 +104,7 @@ To prove this assumption, an iterative \ac{NN} was implemented. It consists of s
 		}
 		\Return{Sorted $R$}
 	}
-	\caption{Iterative \ac{NN}}
+	\caption{Iterative \acs{NN}}
 	\label{alg:iterative_nn}
 \end{algorithm}
 

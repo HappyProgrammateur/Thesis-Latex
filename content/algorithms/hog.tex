@@ -1,4 +1,4 @@
-\subsection{\acf{HOG}}
+\subsection{\acf*{HOG}}
 \label{sec:hog}
 
 \ac{HOG} were first introduced by Dalal and Triggs in 2005 \cite{Dalal2005}. The idea behind \ac{HOG} is that the objects and shapes could be described by the distribution of gradients and edge directions.
@@ -9,7 +9,7 @@ The second step handles the binning by creating the cell histograms. In this ste
 
 \begin{wrapfigure}[8]{r}{0.1\textwidth}
     \includegraphics[width=\textwidth]{images/r-hog}
-    \caption{}
+    \caption[R-HOG samples]{}
     \label{fig:r-hog}
 \end{wrapfigure}
 
@@ -22,7 +22,7 @@ The following approaches produced the same performance:
 \begin{itemize}
 	\item L2-norm $v \rightarrow v / \sqrt{||v||_2^2 + \epsilon^2}$
 	\item L1-sqrt $v \rightarrow \sqrt{v / ||v||_1 + \epsilon}$
-	\item L2-Hys (a L2-norm with a maximum clipping to 0.2 and a renormalization as used by Lowe \cite{Lowe2004})%$v \rightarrow \frac{\max(v / \sqrt{||v||_2^2 + \epsilon^2}, 0.2)}{\sqrt{||\max(v / \sqrt{||v||_2^2 + \epsilon^2}, 0.2)||_2^2 + \epsilon^2}}$ %TODO renormalizing 
+	\item L2-Hys (a L2-norm with a maximum clipping to 0.2 and a renormalization as used by Lowe \cite{Lowe2004})
 \end{itemize}
 Whilst a simple L1-norm reduced the performance by 5\% and omitting the normalization completely reduced it by 27\% according to Dalal and Triggs \cite{Dalal2005}. Another approach computes the energy of a cell and its surrounding area and uses it to normalize the cell, but also decreases the performance relative to the other approaches.
 
