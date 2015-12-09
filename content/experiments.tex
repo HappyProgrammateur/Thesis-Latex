@@ -71,7 +71,22 @@ With the initial implementation, which uses a sliding window algorithm with a fi
 Further experiments used an implementation which shifts the windows based on their size. This reduces the amount of windows and therefore increases the processing speed as shown in \figref{processing_time_windows}.
 As it obviously also reduces the number of hypotheses, the possibility to find a perfect match decreases. To see the relationship between the amount of windows and the detection performance, multiple runs with different configurations and window slide settings were done.
 
-The tests with the files from appendix \ref{apx:images50} provided a performance which comes near to the ExemplarSVM. Additionally, some of the query images performed much better compared to the ExemplarSVM algorithm. Together with the fact that the performance of the different approaches were in similar ranges, the assumption arises that there is some bias in the test set. This bias results in a behavior which always prefers windows which encloses a large portion of an image. Combined with the fact that (the randomly chosen) test images contain many images with bicycles nearly of the image size, this results in similar performance rates for different bicycle queries. To add more variance to the test set, another randomly chosen images were added to get 234 images in total (97 bicycle and 137 non-bicycle images).
+\begin{figure}
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{images/window_comparison-2008_004363}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=\textwidth]{images/window_comparison-2010_003701}
+\end{subfigure}
+\caption[Performances of querying with 2008\_004363 and 2010\_003701 with different techniques and window amounts]{Performances of querying with 2008\_004363 and 2010\_003701 with different techniques and window amounts. 512-4-3 represents 512 clusters, windows divided into 4 parts, database splitted into 3 scale ranges.}
+\label{fig:performance_query_params}
+\end{figure}
+
+
+The tests with the files from appendix \ref{apx:images50} provided a performance which comes near to the ExemplarSVM. Additionally, some of the query images performed much better compared to the ExemplarSVM algorithm (\figref{performance_query_params}). The significantly performance differences between ExemplarSVM and the tested approaches, together with the fact that the results could not be directly correlated to the chosen parameters, the assumption arises that there is some bias in the test set. This bias results in a behavior which always prefers windows which encloses a large portion of an image. Combined with the fact that (the randomly chosen) test images contain many images with bicycles nearly of the image size, this results in similar performance rates for different bicycle queries. To add more variance to the test set, another randomly chosen images were added to get 234 images in total (97 bicycle and 137 non-bicycle images).
 
 By using this image set, the performance slightly decreased (as expected). 
 %TODO: 100 images
