@@ -38,7 +38,7 @@ The update process reoccurs until all observations remain at the assigned center
 \end{figure}
 
 
-This means that the k-means algorithm tries to optimize the objective function \ref{eqn:kmeans_objective_function}. As there are only a finite number of possible assignments for the amount of centroids and observations available and each iteration has to result in better solution, the algorithm always ends in a local minimum.
+This means that the k-means algorithm tries to optimize the objective function \ref{eqn:kmeans_objective_function}. As there is only a finite number of possible assignments for the amount of centroids and observations available and each iteration has to result in better solution, the algorithm always ends in a local minimum.
 
 \begin{equation}
 J = \sum_{n=1}^{N} \sum_{k=1}^{K} r_{nk} ||x_n - \mu_k||^2
@@ -56,7 +56,7 @@ r_{nk} = \begin{cases}
 
 % minimize graph image
 
-The main problem of k-means is his dependency to the initial chosen centroids. The centroids could end up in splitting common data points whilst other, separated points get grouped together if some of the points are more attracted by outliers of multiple points get pulled to the same group of data points as shown in figure \ref{fig:kmeans_bad}.
+The main problem of k-means is its dependency on the initially chosen centroids. The centroids could end up in splitting common data points whilst other, separated points get grouped together if some of the centroids are more attracted by outliers. This points will get pulled to the same group of data points as shown in figure \ref{fig:kmeans_bad}.
 
 
 \begin{figure}[h]
@@ -65,11 +65,11 @@ The main problem of k-means is his dependency to the initial chosen centroids. T
 \label{fig:kmeans_bad}
 \end{figure}
 
-The most common approach is to perform multiple clusterings with different start positions. Afterwards the most occurred clustering is considered as correct. Another, newer approach is the so called k-means++ by Arthur and Vassilvitskii \cite{Arthur:2007:KAC:1283383.1283494}. This extension to the k-means algorithm tries to distribute the initial centroids over the given data to minimize the probability of bad outcomes. The initial points are set according to the authors by the following steps
+The most common approach is to perform multiple clusterings with different start positions. Afterwards the clustering which occurred most is considered as correct. Another, newer approach is the so called k-means++ by Arthur and Vassilvitskii \cite{Arthur:2007:KAC:1283383.1283494}. This extension to the k-means algorithm tries to distribute the initial centroids over the given data to minimize the probability of bad outcomes. The initial points are set according to the authors by the following steps
 
 \begin{enumerate}
     \item Take uniformly a random data point from the data $X$ and mark it as centroid $c_1$
-    \item Choose another centroid $c_i$ with the probability $\frac{D(x)^2}{\sum_{x \in X} D(x)^2}$ where $D(x)$ denotes the shortest distance from the data point $x$ to its closed, already chosen centroid.
+    \item Choose another centroid $c_i$ with the probability $\frac{D(x)^2}{\sum_{x \in X} D(x)^2}$ where $D(x)$ denotes the shortest distance from the data point $x$ to its closest, already chosen centroid.
     \item Repeat 2. until all $k$ initial centroids are chosen.
 \end{enumerate}
 

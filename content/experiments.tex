@@ -88,15 +88,52 @@ As it obviously also reduces the number of hypotheses, the possibility to find a
 
 The tests with the files from appendix \ref{apx:images50} provided a performance which comes near to the ExemplarSVM. Additionally, some of the query images performed much better compared to the ExemplarSVM algorithm (\figref{performance_query_params}). The significantly performance differences between ExemplarSVM and the tested approaches, together with the fact that the results could not be directly correlated to the chosen parameters, the assumption arises that there is some bias in the test set. This bias results in a behavior which always prefers windows which encloses a large portion of an image. Combined with the fact that (the randomly chosen) test images contain many images with bicycles nearly of the image size, this results in similar performance rates for different bicycle queries. To add more variance to the test set, another randomly chosen images were added to get 234 images in total (97 bicycle and 137 non-bicycle images).
 
-By using this image set, the performance slightly decreased (as expected). 
-%TODO: 100 images
+By using this image set, the performance slightly decreased (as expected) (\figref{db2_window_comparison-ALL} compared to \figref{db1_window_comparison-ALL}). Additionally the parameter combination which was expected to provide the best results (4 parts with window prefilter) jumps from the worst to the best. This could be either explained by a measurement error, or because of the increased amount of negatives in the dataset. Therefore result in more penalties if the detection is not accurate enough. The performance compared to the search time is similar to the 50 image dataset, although some of the parameter combinations (primarily 4 parts, single scale range) took more time in average (per processed image in the database) than the ExemplarSVM. This could be explained by the increased general size of the database and the higher amount of data as all different input scales were loaded together.
 
-For the third iteration of the tests, the first 2500 images of the the \ac{PASCAL} bicycle validation dataset were used. 
-%TODO 2500 images
+For the third iteration of the tests, the first 2500 images of the the \ac{VOC2011} bicycle validation dataset were used. This time, the performance gap between the ExemplarSVM and the different approaches increased and the processing time of all parameter combinations was higher than the ExemplarSVM variant. As this also corresponds to the increased loading time of the database (the processing alone was significant lower than the ExemplarSVM in previous experiments), this could be mitigated by loading smaller chunks of the database. This allows to separate the I/O operations from the CPU intensive tasks. Due to the limited time, this adjustment could not be implemented.
 
-- Verschiedene Parameter
-- Performance
-- Ladezeiten/Speicher
-- Geschwindigkeiten
-- Vergleich zu ExemplarSVM
-- Beispielergebnisse
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{images/db1_window_comparison-ALL}
+\caption{Averaged detection performance of different windows compared to ExemplarSVM (50 images)}
+\label{fig:db1_window_comparison-ALL}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{images/db1_t_vs_p-ALL}
+\caption{Performance versus search time (50 images)}
+\label{fig:db1_t_vs_p-ALL}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{images/db2_window_comparison-ALL}
+\caption{Averaged detection performance of different windows compared to ExemplarSVM (100 images)}
+\label{fig:db2_window_comparison-ALL}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{images/db2_t_vs_p-ALL}
+\caption{Performance versus search time (100 images)}
+\label{fig:db2_t_vs_p-ALL}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{images/val_window_comparison-ALL}
+\caption{Averaged detection performance of different windows compared to ExemplarSVM (2500 images)}
+\label{fig:val_window_comparison-ALL}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{images/val_t_vs_p-ALL}
+\caption{Performance versus search time (2500 images)}
+\label{fig:val_t_vs_p-ALL}
+\end{figure}

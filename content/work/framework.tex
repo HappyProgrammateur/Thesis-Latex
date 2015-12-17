@@ -7,7 +7,7 @@
 
 The following section describes the framework which was developed during this thesis and how it could be used and configured. The framework was developed in two iterations. The first iteration was merely used during the initial experiments and resulted in a collection of \MATLAB scripts, barely useful for reuse but brought some insights into the possibilities of \MATLAB and for the next version of the framework. The second iteration was developed with having a future reuse and extendability in mind.
 
-\subsection{First version}
+\subsection{Initial implementation for the basic experiments}
 
 \begin{wrapfigure}{r}{0.4\textwidth}
 \includegraphics[width=\textwidth]{content/pictures/v1_dirs.png}
@@ -41,7 +41,7 @@ Depending on the chosen feature backend a folder with an optional tag (for examp
 
 During the development process several utility applications were created with the python\footnote{\url{https://www.python.org}} programming language. The two main applications are \ac{GUI} based programs to work with a list of PASCAL images and group them in up to four different lists or remove some of the images from a list. The first application was written because it was required during the experiments to create multiple lists of bicycles, grouped by their orientation. As the image lists contained a high amount of images and the verification of which image is meant by a given image id was a time consuming task, the second application was written to simplify the removal of images from a given list. Both applications can be found in the git repository at \url{https://github.com/bluec0re/pascal-utils}\footnote{Revision at the time of writting: 7a4be4c941a03bc2810dd2fbbec3f336ff38fdc3}.
 
-\subsection{Second version}
+\subsection{Implementation of the different approaches}
 
 After the first experiments with the feature algorithms, codebook dimensions and \ac{SVM} usage were done, the second version of the framework was developed. The framework design was orientated on the ExemplarSVM framework. This means that some of the functions are reused as for example the parsing routines for a PASCAL dataset like \ac{VOC2011}. In contrast to the first version, no global variables are used (except for caching during automated tests). Instead all settings and temporary information is stored in a configuration structure which each function expect as its first argument. Besides of some ExemplarSVM settings used for the feature extraction, all parameters which affect the execution flow are defined as fields in the structure. The default settings as described in \prettyref{tab:configuration_framework} can be obtained by calling the \verb|get_default_configuration| function. Two utility functions for providing easy-to-use wrapper functions like the \verb|demo| function are \verb|parse_keywords| which allows to parse a list of arguments in a key value like fashion. In contrast to the \verb|inputParser| class from \MATLAB, a predefinition of the available arguments is not required (although they can be restricted according to a list of strings) and the \verb|merge_structs| function which merges multiple structs into a single struct. By combining the three functions, a simple configuration by using function arguments is implemented.
 

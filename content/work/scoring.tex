@@ -2,7 +2,7 @@
 
 % svm
 
-As the direct comparison via a \ac{NN} approach did not provided the desired performance and also resulted in a time consuming task if the amount of codebooks increases, another approach was required. One possible solution for detecting similar vectors is a \ac{SVM} based classifier (for a more detailed description about \acp{SVM} see \prettyref{sec:svm}). In this particular case a \ac{C-SVC} was trained \cite{Chang:2011:LLS:1961189.1961199} \cite{boser1992training} \cite{cortes1995support}.
+As the direct comparison via a \ac{NN} approach did not provide the desired performance and also resulted in a time consuming task if the amount of codebooks increased, another approach was required. One possible solution for detecting similar vectors is a \ac{SVM} based classifier (for a more detailed description about \acp{SVM} see \prettyref{sec:svm}). In this particular case a \ac{C-SVC} was trained \cite{Chang:2011:LLS:1961189.1961199} \cite{boser1992training} \cite{cortes1995support}.
 
 \Iac{C-SVC} tries to solve the optimization problem \ref{eqn:c-svc_problem} where $x_i \in \mathbb{R}^n, i = 1, \dots, l$ denotes the training vectors, $y \in \mathbb{R}^l, y_i \in \{-1, 1\}$ an indication vector and $\phi(x_i)$ as a mapping of $x_i$ to a higher dimensional space.
 
@@ -58,7 +58,7 @@ The positive class is represented by the query codebook, whilst all other classe
     \label{alg:calc_windows}
 \end{algorithm}
 
-With this list, all feature patches are assigned to these windows where their center is placed in. For each window, a codebook is calculated by the equations \ref{eqn:codebook_calc1} to \ref{eqn:codebook_calc3}. The resulting list of codebooks is stored and loaded during the \ac{SVM} training and used as the negative training set. If the \ac{VOC2011} class is available for the query image part, the negative set can additionally restricted to windows not containing bounding boxes assigned to the same class as the query part. This is accomplished by setting an appropriate mask for the \verb|getHogsInsideBox| function. The \ac{SVM} training was done by the libsvm library \cite{Chang:2011:LLS:1961189.1961199} by using the \texttt{svmtrain} function. The parameters for the training are the same as for the ExemplarSVM library \cite{Malisiewicz2011} (see \tabref{libsvm_train_params}).
+With this list, all feature patches are assigned to these windows where their center is placed in. For each window, a codebook is calculated by the equations \ref{eqn:codebook_calc1} to \ref{eqn:codebook_calc3}. The resulting list of codebooks is stored and loaded during the \ac{SVM} training and used as the negative training set. If the \ac{VOC2011} class is available for the query image part, the negative set can additionally be restricted to windows not containing bounding boxes assigned to the same class as the query part. This is accomplished by setting an appropriate mask for the \verb|getHogsInsideBox| function. The \ac{SVM} training was done by the libsvm library \cite{Chang:2011:LLS:1961189.1961199} by using the \texttt{svmtrain} function. The parameters for the training are the same as for the ExemplarSVM library \cite{Malisiewicz2011} (see \tabref{libsvm_train_params}).
 
 \begin{table}
     \begin{tabular}{|l|l|}
@@ -78,7 +78,7 @@ With this list, all feature patches are assigned to these windows where their ce
     \label{tab:libsvm_train_params}
 \end{table}
 
-Other assignment methods were also evaluated, including multi assignments like assigning a feature to every window were a corner is located in, or to every window which contains a minimum amount of the patch (e.g. 30\% of its area). These approaches did not provide enough performance gain in comparison to the computational overhead. Another approach was the usage of the bottom right corner, which obviously led to the fact that the detection candidates were slightly shifted to the bottom right compared to an optimum detection. 
+Other assignment methods were also evaluated, including multi assignments like assigning a feature to every window where a corner is located in, or to every window which contains a minimum amount of the patch (e.g. 30\% of its area). These approaches did not provide enough performance gain in comparison to the computational overhead. Another approach was the usage of the bottom right corner, which obviously led to the fact that the detection candidates were slightly shifted to the bottom right compared to an optimum detection. 
 
 In the first place, the classification function provided by libsvm\footnote{\texttt{svmpredict(\dots)}} was used. With an increasing amount of codebooks which have to be classified by the \ac{SVM}, the function has taken a big part of the computation time. By replacing the function with the \MATLAB equivalent ($codebooks * (svm_{vectors}^T * svm_{coefficents}) - svm_{\rho}$) (listing \ref{lst:matlab_svm_predict}), the computation time could be reduced from approximate 150 seconds to 3 seconds with 250,000 codebooks (5,000 windows in 50 images).
 
