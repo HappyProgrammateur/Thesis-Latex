@@ -20,19 +20,19 @@ The update process reoccurs until all observations remain at the assigned center
 % sample images
 
 \begin{figure}
-\includegraphics[width=0.7\linewidth]{images/iteration01}
+\includegraphics[width=0.6\linewidth]{images/iteration01}
 \caption{k-Means: Possible initial centroid positions}
 \label{fig:kmeans:iteration01}
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=0.7\linewidth]{images/iteration02}
+\includegraphics[width=0.6\linewidth]{images/iteration02}
 \caption{k-Means: First iteration}
 \label{fig:kmeans:iteration02}
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=0.7\linewidth]{images/iteration03}
+\includegraphics[width=0.6\linewidth]{images/iteration03}
 \caption{k-Means: Second iteration}
 \label{fig:kmeans:iteration03}
 \end{figure}
@@ -60,12 +60,12 @@ The main problem of k-means is its dependency on the initially chosen centroids.
 
 
 \begin{figure}[h]
-\includegraphics[width=0.7\linewidth]{images/kmeans_bad}
+\includegraphics[width=0.6\linewidth]{images/kmeans_bad}
 \caption{k-Means: Badly chosen initial center points}
 \label{fig:kmeans_bad}
 \end{figure}
 
-The most common approach is to perform multiple clusterings with different start positions. Afterwards the clustering which occurred most is considered as correct. Another, newer approach is the so called k-means++ by Arthur and Vassilvitskii \cite{Arthur:2007:KAC:1283383.1283494}. This extension to the k-means algorithm tries to distribute the initial centroids over the given data to minimize the probability of bad outcomes. The initial points are set according to the authors by the following steps
+The most common approach is to perform multiple clusterings with different start positions. Afterwards the clustering, which occurred most is considered as correct. Another, newer approach is the so called k-means++ by Arthur and Vassilvitskii \cite{Arthur:2007:KAC:1283383.1283494}. This extension to the k-means algorithm tries to distribute the initial centroids over the given data to minimize the probability of bad outcomes. The initial points are set according to the authors by the following steps
 
 \begin{enumerate}
     \item Take uniformly a random data point from the data $X$ and mark it as centroid $c_1$

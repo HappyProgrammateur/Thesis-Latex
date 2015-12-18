@@ -3,7 +3,7 @@
 % !TeX root = ../../main.tex
 \section{Extracting features}
 
-Based on the fact that the Exemplar-SVM framework \cite{Malisiewicz2011} uses \ac{HOG} (as described in \prettyref{sec:hog}) as feature representatives and the performance observations made in earlier work, this work is also based on features extracted from images by \ac{HOG}. The extraction is done by the function \verb|get_pyramid| which itself uses the \verb|esvm_pyramid| function from the Exemplar-SVM framework. This function takes the input image at different scales $S$ to get multiple representations of the image.
+Based on the fact that the Exemplar-SVM framework \cite{Malisiewicz2011} uses \ac{HOG} (as described in \prettyref{sec:hog}) as feature representatives and the performance observations made in earlier work, this work is also based on features extracted from images by \ac{HOG}. The extraction is done by the function \verb|get_pyramid|, which itself uses the \verb|esvm_pyramid| function from the Exemplar-SVM framework. This function takes the input image at different scales $S$ to get multiple representations of the image.
 
 \begin{equation}
 S = \{s|s = \frac{1}{2^{0.1 * (i-1)}}; i \in \mathbb{N}; 1 \le i \le 100;\}
@@ -15,7 +15,7 @@ The different scales along with their corresponding feature representations buil
 
 As a single \ac{HOG} feature provides too few information about the structure relations, typically multiple \acp{HOG} are combined into a greater vector to optimally represent corners and circles. Most of the time 25 \acp{HOG} arranged in a $5\times5$ grid were used. This results in feature vectors with 775 dimensions. The creation of these vectors is done by concatenating all possible $5\times5$ cells together. For example the first vector would consist of the cells \mathlist{(1,1), (2,1), (3,1), (4,1), (5,1), (1,2), (2,2), \dots, (5,5)}. The second vector could be created by the cells \mathlist{(2,1), (3,1), (4,1), (5,1), (6,1), (2,2), (3,2), \dots, (6,5)} and so forth. Along with a list of bounding boxes encapsulating the 25 cells and a list of scales to preserve the correspondence to the original feature pyramid a complete image is processed and represented.
 \par
-These features could be further optimized by transferring them into \ac{WHOG} (for a detailed description refer to \prettyref{sec:whitened_hog}). To reduce the background noise even further all feature vectors which have a gradient lower than $\frac{25}{255}$ or whose \ac{LDA} distance is smaller than the difference between the mean and the standard derivation are removed.
+These features could be further optimized by transferring them into \ac{WHOG} (for a detailed description refer to \prettyref{sec:whitened_hog}). To reduce the background noise even further all feature vectors, which have a gradient lower than $\frac{25}{255}$ or whose \ac{LDA} distance is smaller than the difference between the mean and the standard derivation are removed.
 
 \section{Abstracting the feature computation}
 
@@ -38,7 +38,7 @@ a|x|^3-5a|x|^2+8a|x|-4a & \text{for } 1 < |x| < 2 \\
 \label{eqn:bicubic_kernel}
 \end{equation}
 
-with $a=-0.5$ in the \MATLAB implementation\footnote{Implemented in the \textit{toolbox/images/images/imresize.m} file in the \MATLAB installation directory}. With this mask, all feature patches which are not fully covered by the positive entries of the mask were discarded. The implementation for the grouping of \ac{HOG} features to one 775 dimensional vector and the masking is done in the \verb|getHogsInsideBox| function.
+with $a=-0.5$ in the \MATLAB implementation\footnote{Implemented in the \textit{toolbox/images/images/imresize.m} file in the \MATLAB installation directory}. With this mask, all feature patches, which are not fully covered by the positive entries of the mask were discarded. The implementation for the grouping of \ac{HOG} features to one 775 dimensional vector and the masking is done in the \verb|getHogsInsideBox| function.
 \bigskip
 
 The codebooks are afterwards created by selecting each labeled bounding box of each test image, computing the features $X$ (\ac{HOG} and whitened \ac{HOG}), assigning them to the clusters by the corresponding centroids $C$ (either \ac{NN} in terms of k-means or by computing the fisher vector) and comparing them to the codebooks of the remaining image bounding boxes. In case of k-means, the codebook values $c$ themselves depend on the distances $D$ of the features to their corresponding centroids $C$ as described in the equations \ref{eqn:codebook_calc1}, \ref{eqn:codebook_calc2} and \ref{eqn:codebook_calc3}.

@@ -1,7 +1,7 @@
 \subsection{\acf*{GMM}}
 \label{sec:gmm}
 
-\acl{GMM} is a probabilistic model coming from the mathematical field of statistics \cite{mclachlan1988mixture}. It is based on multi-variant normal distributions which have n-dimensional random variables as described in \eqnref{mulgauss} (in contrast to the gauss distribution from \eqnref{singlegauss} postulated by Carl Friedrich Gauss).
+\acl{GMM} is a probabilistic model coming from the mathematical field of statistics \cite{mclachlan1988mixture}. It is based on multi-variant normal distributions, which have n-dimensional random variables as described in \eqnref{mulgauss} (in contrast to the gauss distribution from \eqnref{singlegauss} postulated by Carl Friedrich Gauss).
 
 \begin{eqnarray}
 \label{eqn:mulgauss}
@@ -36,7 +36,7 @@ The mixture weights have to satisfy the constraint $\sum_{i=1}^N w_i = 1$. Each 
 g(x|\mu_i, \Sigma_i) = \frac{1}{(2\pi)^{D/2} | \Sigma_i |^{1/2}} exp \left\{ - \frac{1}{2} (x - \mu_i)' \Sigma_i^{-1} (x - \mu_i) \right\}
 \end{equation}
 
-A complete \ac{GMM} can be described by its parameters $\lambda = \{w, \mu, \Sigma\}$. Typically a \ac{GMM} is trained by the \acf{EM} algorithm \cite{dempster1977maximum}. This algorithm is used to iteratively apply the \ac{ML} estimation of the model parameters. The \ac{ML} tries to find the parameters which maximizes the likelihood of a \ac{GMM} for a given training data with $N$ datapoints. The \ac{GMM} likelihood is typically described as (assuming an independence between the training vectors $X = \{x_i,\dots,x_N\}$):
+A complete \ac{GMM} can be described by its parameters $\lambda = \{w, \mu, \Sigma\}$. Typically a \ac{GMM} is trained by the \acf{EM} algorithm \cite{dempster1977maximum}. This algorithm is used to iteratively apply the \ac{ML} estimation of the model parameters. The \ac{ML} tries to find the parameters, which maximizes the likelihood of a \ac{GMM} for a given training data with $N$ datapoints. The \ac{GMM} likelihood is typically described as (assuming an independence between the training vectors $X = \{x_i,\dots,x_N\}$):
 
 \begin{equation}
 \label{eqn:likelihood}

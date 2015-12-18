@@ -17,19 +17,23 @@ As multiple approaches were developed during the thesis, several experiments wer
 
 To test the loading times, the different storage mechanisms were each tested with 512 and 1000 codebook dimensions. Together with the different mechanism, this results in total to 14 unique combinations. Each combination loads the same database containing 50 images with an average size of 476x391 pixels\footnote{The list of PASCAL ids can be found in the appendix \ref{apx:images50}}. It should be noted that all mechanisms result in the same integral images at runtime or at least provide the same results on extraction.
 
+
 \begin{figure}
+\begin{subfigure}[t]{0.5\textwidth}
 \centering
-\includegraphics[width=0.7\linewidth]{images/loading_time}
+\includegraphics[width=\linewidth]{images/loading_time}
 \caption{Loading times of all database storage backends.}
 \label{fig:loading_all}
-\end{figure}
-
-
-\begin{figure}
+\end{subfigure}%
+%
+\begin{subfigure}[t]{0.5\textwidth}
 \centering
-\includegraphics[width=0.7\linewidth]{images/loading_time_2}
+\includegraphics[width=\linewidth]{images/loading_time_2}
 \caption{Loading times of all database storage backends except the na\"{\i}ve and sparse ones.}
 \label{fig:loading_except_naiive}
+\end{subfigure}
+
+\caption{Loading times of the different database storage backends.}
 \end{figure}
 
 
@@ -45,20 +49,39 @@ As one can see in \figref{loading_all} the na\"{\i}ve approach (which stores the
 
 \Figref{file_sizes} shows the file sizes of the different techniques. As one may notice, the \MATLAB sparse representation of the database requires much more space on the filesystem compared to the na\"{\i}ve approach, but loads faster. This is because the internal representation of the sparse matrices was not as small compressed as the full matrices, possibly mainly because the amount of consecutive data is much reduced. Obviously, the compressed matrices have to be uncompressed during load, which requires more time than loading the bigger file of sparse matrices. As the compression is mandatory for \MATLAB files with version 7 and up\footnote{\label{footnote:matlab_files}As described on \url{https://de.mathworks.com/help/matlab/ref/save.html?refresh=true} (visited 11/06/2015)} and version 7.3 is required due to the large variable sizes\footnoteref{footnote:matlab_files}, this behavior can not be circumvented.
 
+\begin{figure}
+\begin{subfigure}[t]{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{images/mem_size}
+\caption{All backends}
+\label{fig:memory_usage}
+\end{subfigure}%
+%
+\begin{subfigure}[t]{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{images/mem_size2}
+\caption{All backends except the na\"{\i}ve and sparse ones.}
+\label{fig:memory_usage2}
+\end{subfigure}
+
+\caption{Memory usage of the different storage backends.}
+\end{figure}
+
+The memory usage of the different techniques in \ac{RAM} is shown in \figref{memory_usage}. It has to be noted that some of the techniques (namely the summation and overwrite) require the reconstruction of the original integral images. This increases the memory usage during runtime, but (in contrast to the na\"{\i}ve technique) only for one image at a time (when it is queried). The required size depends on the information, which is needed to reconstruct every possible extraction point. As the summation techniques calculates the integral image at runtime, it requires the least stored information. The implementation of the sparse storage mechanism allows only to omit cells with a zero value and therefore has to store all cells, which are in the bottom left of the first filled cell for a codebook dimension. The kd-Tree variants, compared to the checkpoints variant, require some additional meta information to build up the tree.
+
+To complete the comparison between the different mechanisms, the time required to extract a complete set of windows from an image was measured. The computation of the window list was based on \textit{2008\_004363.jpg} with the bounding box $x_{min} = 102, y_{min} = 178, x_{max} = 344, y_{max} = 336$. This results into 4784 windows. As one can see in \figref{extract_time}, the live reconstruction of the integral image by using the summation or overwrite technique are clearly the most time consuming ones.
+
+%TODO describe figure!!!!
 
 \begin{figure}
 \centering
-\includegraphics[width=0.7\linewidth]{images/mem_size}
-\caption{Memory usage of the different storage backends.}
-\label{fig:memory_usage}
+\includegraphics[width=\linewidth]{images/extract_times}
+\caption[Extraction times of different parameter combinations.]{Extraction times of different parameter combinations based on the average of a 50 image database.}
+\label{fig:extract_time}
 \end{figure}
 
-The memory usage of the different techniques in \ac{RAM} is shown in \figref{memory_usage}. It has to be noted that some of the techniques (namely the summation and overwrite) require the reconstruction of the original integral images. This increases the memory usage during runtime, but (in contrast to the na\"{\i}ve technique) only for one image at a time (when it is queried). The required size depends on the information which is needed to reconstruct every possible extraction point. As the summation techniques calculates the integral image at runtime, it requires the least stored information. The implementation of the sparse storage mechanism allows only to omit cells with a zero value and therefore has to store all cells which are in the bottom left of the first filled cell for a codebook dimension. The kd-Tree variants, compared to the checkpoints variant, require some additional meta information to build up the tree.
-
-To complete the comparison between the different mechanisms, the time required to extract a complete set of windows from an image was measured. The computation of the window list was based on \textit{2008\_004363.jpg} with the bounding box $x_{min} = 102, y_{min} = 178, x_{max} = 344, y_{max} = 336$. This results into 4784 windows. %TODO: Extract time
-
 As the ExemplarSVM does not load precomputed data, except of the negative features for the \ac{SVM} training, it was not possible to compare it with the different parts of the tested approaches. Instead the total processing time is used.
-With the initial implementation, which uses a sliding window algorithm with a fixed 10 pixel shift, the amount of searched windows (between 4000 and 7500, depending on the query image) is much higher compared to the searched windows in the ExemplarSVM algorithm (limited to 400). This obviously results in a high processing time for all configurations as one can see in \figref{orig_window_time}.
+With the initial implementation, which uses a sliding window algorithm with a fixed 10 pixel shift, the amount of searched windows (between 4000 and 7500, depending on the query image) is much higher compared to the searched windows in the ExemplarSVM algorithm (limited to 400). This obviously results in a high processing time for all configurations as one can see in \figref{processing_time_windows}.
 
 \begin{figure}
 \centering
@@ -68,7 +91,7 @@ With the initial implementation, which uses a sliding window algorithm with a fi
 \end{figure}
 
 
-Further experiments used an implementation which shifts the windows based on their size. This reduces the amount of windows and therefore increases the processing speed as shown in \figref{processing_time_windows}.
+Further experiments used an implementation, which shifts the windows based on their size. This reduces the amount of windows and therefore increases the processing speed as shown in \figref{processing_time_windows}.
 As it obviously also reduces the number of hypotheses, the possibility to find a perfect match decreases. To see the relationship between the amount of windows and the detection performance, multiple runs with different configurations and window slide settings were done.
 
 \begin{figure}
@@ -86,11 +109,11 @@ As it obviously also reduces the number of hypotheses, the possibility to find a
 \end{figure}
 
 
-The tests with the files from appendix \ref{apx:images50} provided a performance which comes near to the ExemplarSVM. Additionally, some of the query images performed much better compared to the ExemplarSVM algorithm (\figref{performance_query_params}). The significantly performance differences between ExemplarSVM and the tested approaches, together with the fact that the results could not be directly correlated to the chosen parameters, the assumption arises that there is some bias in the test set. This bias results in a behavior which always prefers windows which encloses a large portion of an image. Combined with the fact that (the randomly chosen) test images contain many images with bicycles nearly of the image size, this results in similar performance rates for different bicycle queries. To add more variance to the test set, another randomly chosen images were added to get 234 images in total (97 bicycle and 137 non-bicycle images).
+The tests with the files from appendix \ref{apx:images50} provided a performance, which comes near to the ExemplarSVM. Additionally, some of the query images performed much better compared to the ExemplarSVM algorithm (\figref{performance_query_params}). Based on the significantly performance differences between ExemplarSVM and the tested approaches on some test images, together with the fact that the results could not be directly correlated to the chosen parameters, the assumption arises that there is some bias in the test set. This bias results in a behavior, which always prefers windows enclosing a large portion of an image. Combined with the fact that (the randomly chosen) test images contain many images with bicycles nearly of the image size, this results in similar performance rates for different bicycle queries. To add more variance to the test set, more randomly chosen images have been added to get 234 images in total (97 bicycle and 137 non-bicycle images).
 
 By using this image set, the performance slightly decreased (as expected) (\figref{db2_window_comparison-ALL} compared to \figref{db1_window_comparison-ALL}). Additionally the parameter combination which was expected to provide the best results (4 parts with window prefilter) jumps from the worst to the best. This could be either explained by a measurement error, or because of the increased amount of negatives in the dataset. Therefore result in more penalties if the detection is not accurate enough. The performance compared to the search time is similar to the 50 image dataset, although some of the parameter combinations (primarily 4 parts, single scale range) took more time in average (per processed image in the database) than the ExemplarSVM. This could be explained by the increased general size of the database and the higher amount of data as all different input scales were loaded together.
 
-For the third iteration of the tests, the first 2500 images of the the \ac{VOC2011} bicycle validation dataset were used. This time, the performance gap between the ExemplarSVM and the different approaches increased and the processing time of all parameter combinations was higher than the ExemplarSVM variant. As this also corresponds to the increased loading time of the database (the processing alone was significant lower than the ExemplarSVM in previous experiments), this could be mitigated by loading smaller chunks of the database. This allows to separate the I/O operations from the CPU intensive tasks. Due to the limited time, this adjustment could not be implemented.
+For the third iteration of the tests, the first 2500 images of the the \ac{VOC2011} bicycle validation dataset were used. This time, the performance gap between the ExemplarSVM and the different approaches increased and the processing time of all parameter combinations was higher than the ExemplarSVM variant. As this also corresponds to the increased loading time of the database (the processing alone was significant lower than the ExemplarSVM in previous experiments), this could be mitigated by loading smaller chunks of the database. This allows to separate the I/O operations from the CPU intensive tasks. Due to the limited time, this adjustment was not implemented.
 
 
 \begin{figure}

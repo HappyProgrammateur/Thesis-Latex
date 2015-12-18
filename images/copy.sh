@@ -10,3 +10,10 @@ do
     cp -v "../../sources/thesis2/results/performance/$src/min/3/ALL/512/window_comparison-ALL.png" "${dst}_window_comparison-ALL.png"
     cp -v "../../sources/thesis2/results/timing_vs_performance/$src/ALL.png" "${dst}_t_vs_p-ALL.png"
 done
+
+
+for img in 'extract_times' 'mem_size' 'mem_size2' 'file_size' 'loading_time' 'loading_time_2'
+do
+    cp -v "../../sources/thesis2/results/timings/$img.png" "$img.png"
+    cp -v "../../sources/thesis2/results/timings/$img.pdf" "$img.pdf"
+done
